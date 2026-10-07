@@ -1,9 +1,10 @@
 import { useState, useCallback } from 'react'
 
-interface LocationData {
+export interface LocationData {
   latitude: number
   longitude: number
   locationName: string
+  accuracy?: number
 }
 
 export function useGeolocation() {
@@ -17,7 +18,8 @@ export function useGeolocation() {
 
     return new Promise((resolve) => {
       if (!navigator.geolocation) {
-        setError('Geolocation tidak didukung di browser ini')
+        const errMsg = 'GPS / Geolocation tidak didukung di browser ini.'
+        setError(errMsg)
         setLoading(false)
         resolve(null)
         return
@@ -25,37 +27,85 @@ export function useGeolocation() {
 
       navigator.geolocation.getCurrentPosition(
         async (position) => {
-          const { latitude, longitude } = position.coords
-          let locationName = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`
+          const { latitude, longitude, accuracy } = position.coords
+          let locationName = `Koordinat: ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`
 
-          // Try reverse geocoding
+          // Reverse geocoding via OpenStreetMap Nominatim
           try {
+            const controller = new AbortController()
+            const timeoutId = setTimeout(() => controller.abort(), 6000)
+
             const response = await fetch(
-              `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=16&addressdetails=1`,
-              { headers: { 'Accept-Language': 'id' } }
+              `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=17&addressdetails=1`,
+              {
+                headers: {
+                  'Accept-Language': 'id, en',
+                },
+                signal: controller.signal,
+              }
             )
-            const data = await response.json()
-            if (data.display_name) {
-              locationName = data.display_name
+            clearTimeout(timeoutId)
+
+            if (response.ok) {
+              const data = await response.json()
+              const addr = data.address
+              if (addr) {
+                // Susun nama lokasi yang rapi dan mudah dibaca
+                const parts: string[] = []
+                if (addr.road || addr.pedestrian || addr.building) {
+                  parts.push(addr.road || addr.pedestrian || addr.building)
+                }
+                if (addr.neighbourhood || addr.suburb || addr.village) {
+                  parts.push(addr.neighbourhood || addr.suburb || addr.village)
+                }
+                if (addr.city || addr.town || addr.county || addr.city_district) {
+                  parts.push(addr.city || addr.town || addr.county || addr.city_district)
+                }
+                if (parts.length > 0) {
+                  locationName = parts.join(', ')
+                } else if (data.display_name) {
+                  locationName = data.display_name.split(',').slice(0, 3).join(',')
+                }
+              } else if (data.display_name) {
+                locationName = data.display_name
+              }
             }
           } catch {
-            // Use coordinate string as fallback
+            // Fallback ke koordinat
           }
 
-          const locationData = { latitude, longitude, locationName }
+          const locationData: LocationData = {
+            latitude,
+            longitude,
+            locationName,
+            accuracy: Math.round(accuracy),
+          }
           setLocation(locationData)
           setLoading(false)
           resolve(locationData)
         },
         (err) => {
-          setError(`Gagal mendapatkan lokasi: ${err.message}`)
+          let userMsg = `Gagal mendapatkan lokasi: ${err.message}`
+          if (err.code === err.PERMISSION_DENIED) {
+            userMsg = 'Akses lokasi ditolak. Harap izinkan akses lokasi (GPS) pada pengaturan browser/perangkat Anda.'
+          } else if (err.code === err.POSITION_UNAVAILABLE) {
+            userMsg = 'Informasi lokasi tidak tersedia saat ini. Pastikan GPS perangkat aktif.'
+          } else if (err.code === err.TIMEOUT) {
+            userMsg = 'Waktu pencarian lokasi habis. Coba klik ambil lokasi lagi.'
+          }
+
+          setError(userMsg)
           setLoading(false)
           resolve(null)
         },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        {
+          enableHighAccuracy: true,
+          timeout: 12000,
+          maximumAge: 10000,
+        }
       )
     })
   }, [])
 
-  return { location, loading, error, getCurrentLocation }
+  return { location, loading, error, getCurrentLocation, setLocation, setError }
 }

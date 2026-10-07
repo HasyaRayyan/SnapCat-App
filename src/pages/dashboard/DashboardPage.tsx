@@ -73,10 +73,10 @@ export default function DashboardPage() {
       <div className="dashboard-header">
         <div>
           <h1>{greeting()}, {profile?.full_name ?? 'Teman'}! 👋</h1>
-          <p className="subtitle">Kamu sudah mengoleksi <strong>{animals.length}</strong> anabul</p>
+          <p className="subtitle">Kamu sudah mengoleksi <strong>{animals.length}</strong> kucing & anabul di StrayCat 🐾</p>
         </div>
         <Link to="/add">
-          <Button icon={<PlusCircle size={18} />}>Tambah Anabul</Button>
+          <Button icon={<PlusCircle size={18} />}>Tambah Kucing</Button>
         </Link>
       </div>
 
@@ -172,11 +172,11 @@ export default function DashboardPage() {
         <LoadingSpinner />
       ) : animals.length === 0 ? (
         <div className="empty-state">
-          <span className="empty-icon">🐾</span>
-          <h3>Belum Ada Anabul</h3>
-          <p>Yuk mulai koleksi anabul yang kamu temui!</p>
+          <span className="empty-icon">🐱</span>
+          <h3>Belum Ada Kucing Terdata</h3>
+          <p>Yuk mulai petualangan foto kucing liar yang kamu temui di sekitarmu!</p>
           <Link to="/add">
-            <Button icon={<PlusCircle size={18} />}>Tambah Anabul Pertama</Button>
+            <Button icon={<PlusCircle size={18} />}>Foto Kucing Pertama</Button>
           </Link>
         </div>
       ) : (

@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Mail, Lock, User, UserPlus, CheckCircle2, Circle } from 'lucide-react'
+import { Mail, Lock, User, UserPlus, CheckCircle2, Circle, Eye, EyeOff } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { Input } from '../../components/ui/Input'
 import { Button } from '../../components/ui/Button'
@@ -12,6 +12,7 @@ export default function RegisterPage() {
   const [email, setEmail] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -63,7 +64,6 @@ export default function RegisterPage() {
       setLoading(false)
     } else {
       if (session) {
-        // Jika auto-confirm aktif di Supabase, langsung masuk ke dashboard
         navigate('/dashboard')
       } else {
         setSuccess(true)
@@ -75,19 +75,24 @@ export default function RegisterPage() {
   if (success) {
     return (
       <div className="auth-container">
+        <div className="auth-ambient-glow glow-top" />
+        <div className="auth-ambient-glow glow-bottom" />
+
         <div className="auth-card">
           <div className="auth-header">
-            <span className="auth-logo">🎉</span>
-            <h1>Pendaftaran Berhasil!</h1>
-            <p>
-              Akun <strong>@{username}</strong> ({email}) berhasil dibuat.
+            <div className="auth-logo-badge">
+              <span className="auth-logo-emoji">🎉</span>
+            </div>
+            <h1 className="auth-brand-name">Pendaftaran Berhasil!</h1>
+            <p className="auth-brand-desc">
+              Selamat datang di StrayCat, <strong>@{username}</strong>!
             </p>
           </div>
           <div style={{ padding: '24px 32px' }}>
-            <p style={{ fontSize: 14, color: 'var(--text)', marginBottom: 20 }}>
-              Jika konfirmasi email aktif di Supabase, silakan periksa inbox kamu. Atau langsung login sekarang:
+            <p style={{ fontSize: 14, color: 'var(--text)', marginBottom: 20, textAlign: 'center' }}>
+              Akun kamu siap digunakan. Silakan masuk untuk mulai mengoleksi kucing yang kamu temui.
             </p>
-            <Button fullWidth onClick={() => navigate('/login')}>
+            <Button fullWidth size="lg" onClick={() => navigate('/login')}>
               Masuk Sekarang
             </Button>
           </div>
@@ -103,11 +108,16 @@ export default function RegisterPage() {
 
   return (
     <div className="auth-container">
+      <div className="auth-ambient-glow glow-top" />
+      <div className="auth-ambient-glow glow-bottom" />
+
       <div className="auth-card">
         <div className="auth-header">
-          <span className="auth-logo">🐾</span>
-          <h1>Buat Akun</h1>
-          <p>Mulai koleksi anabul yang kamu temui!</p>
+          <div className="auth-logo-badge">
+            <span className="auth-logo-emoji">🐱</span>
+          </div>
+          <h1 className="auth-brand-name">Daftar StrayCat</h1>
+          <p className="auth-brand-desc">Mulai petualangan koleksi kucing liar!</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
@@ -135,16 +145,26 @@ export default function RegisterPage() {
             autoComplete="username"
           />
 
-          <Input
-            label="Password"
-            type="password"
-            placeholder="Minimal 7 karakter, ada huruf & kapital"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            icon={<Lock size={18} />}
-            required
-            autoComplete="new-password"
-          />
+          <div className="password-input-container">
+            <Input
+              label="Password"
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Minimal 7 digit, ada huruf & kapital"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              icon={<Lock size={18} />}
+              required
+              autoComplete="new-password"
+            />
+            <button
+              type="button"
+              className="password-toggle-btn"
+              onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? 'Sembunyikan password' : 'Tampilkan password'}
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
 
           {/* Indikator ketentuan password */}
           <div className="password-hints">
@@ -167,10 +187,11 @@ export default function RegisterPage() {
             type="submit"
             loading={loading}
             fullWidth
+            size="lg"
             icon={<UserPlus size={18} />}
             disabled={password.length > 0 && !isPasswordValid}
           >
-            Daftar
+            Daftar Akun StrayCat
           </Button>
         </form>
 

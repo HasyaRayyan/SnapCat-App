@@ -233,11 +233,11 @@ export default function ProfilePage() {
       </Modal>
 
       {/* About Modal */}
-      <Modal isOpen={showAbout} onClose={() => setShowAbout(false)} title="Tentang StrayDex" size="sm">
+      <Modal isOpen={showAbout} onClose={() => setShowAbout(false)} title="Tentang StrayCat" size="sm">
         <div className="about-content">
-          <span className="about-logo">🐾</span>
-          <h2>StrayDex</h2>
-          <p className="about-tagline">Koleksi Anabul yang Kamu Temui</p>
+          <span className="about-logo">🐱</span>
+          <h2>StrayCat</h2>
+          <p className="about-tagline">Koleksi Kucing & Anabul Liar yang Kamu Temui</p>
           <div className="about-details">
             <div className="about-row">
               <span>Versi</span>
@@ -245,19 +245,19 @@ export default function ProfilePage() {
             </div>
             <div className="about-row">
               <span>Framework</span>
-              <strong>React + Vite</strong>
+              <strong>React 19 + Vite</strong>
             </div>
             <div className="about-row">
               <span>Database</span>
               <strong>Supabase</strong>
             </div>
             <div className="about-row">
-              <span>Language</span>
-              <strong>TypeScript</strong>
+              <span>Fitur</span>
+              <strong>Kamera & GPS Lokasi</strong>
             </div>
           </div>
           <p className="about-footer">
-            Dibuat dengan ❤️ untuk para pecinta anabul
+            Dibuat dengan 💜 untuk para pecinta kucing liar
           </p>
         </div>
       </Modal>

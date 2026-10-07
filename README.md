@@ -1,7 +1,7 @@
-# 🐾 StrayDex - Koleksi Anabul yang Kamu Temui
+# 🐱 StrayCat - Koleksi Kucing & Anabul yang Kamu Temui
 
 <p align="center">
-  <strong>StrayDex</strong> adalah aplikasi web untuk mengoleksi dan mendokumentasikan hewan peliharaan liar (anabul) yang kamu temui di berbagai tempat. Foto, beri nama, dan simpan lokasi setiap anabul yang kamu jumpai!
+  <strong>StrayCat</strong> adalah aplikasi web untuk mengoleksi dan mendokumentasikan kucing liar dan anabul yang kamu temui di berbagai tempat. Foto langsung via kamera, beri nama, dan simpan lokasi GPS setiap kucing yang kamu jumpai!
 </p>
 
 ---

@@ -1,0 +1,267 @@
+.camera-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(12, 7, 25, 0.92);
+  backdrop-filter: blur(12px);
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: cameraFadeIn 0.25s ease;
+}
+
+.camera-modal-container {
+  width: 100%;
+  max-width: 540px;
+  background: #140d29;
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 30px rgba(139, 92, 246, 0.25);
+  display: flex;
+  flex-direction: column;
+}
+
+.camera-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: #1a1033;
+  border-bottom: 1px solid rgba(167, 139, 250, 0.15);
+}
+
+.camera-title-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #f5f3ff;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.camera-close-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: #c4b5fd;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.camera-close-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  transform: rotate(90deg);
+}
+
+/* Viewfinder */
+.camera-viewfinder-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+  background: #000;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.camera-video-feed {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.camera-video-feed.mirrored {
+  transform: scaleX(-1);
+}
+
+.camera-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: photoPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Flash effect */
+.camera-flash-overlay {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  z-index: 10;
+  animation: flashAnim 0.2s ease-out forwards;
+}
+
+/* Grid lines for composition */
+.camera-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.grid-line {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.grid-line.horizontal {
+  left: 0;
+  right: 0;
+  height: 1px;
+}
+.grid-line.horizontal.top { top: 33.33%; }
+.grid-line.horizontal.bottom { top: 66.66%; }
+
+.grid-line.vertical {
+  top: 0;
+  bottom: 0;
+  width: 1px;
+}
+.grid-line.vertical.left { left: 33.33%; }
+.grid-line.vertical.right { left: 66.66%; }
+
+/* Loading & Error */
+.camera-loading {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: #c4b5fd;
+  font-size: 14px;
+}
+
+.camera-spinner {
+  width: 34px;
+  height: 34px;
+  border: 3px solid rgba(167, 139, 250, 0.2);
+  border-top-color: #a78bfa;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.camera-error-box {
+  position: absolute;
+  inset: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(20, 13, 41, 0.95);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.camera-error-box p {
+  font-size: 14px;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Controls */
+.camera-controls-bar {
+  padding: 20px 24px;
+  background: #140d29;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.camera-live-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.camera-tool-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(167, 139, 250, 0.25);
+  color: #e9d5ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.camera-tool-btn:hover:not(:disabled) {
+  background: rgba(167, 139, 250, 0.25);
+  color: #ffffff;
+  transform: rotate(180deg);
+}
+
+.camera-shutter-btn {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: transparent;
+  border: 4px solid #ffffff;
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+}
+
+.camera-shutter-btn:active:not(:disabled) {
+  transform: scale(0.92);
+}
+
+.shutter-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  transition: background 0.2s;
+}
+
+.camera-shutter-btn:hover:not(:disabled) .shutter-inner {
+  background: linear-gradient(135deg, #c084fc, #9333ea);
+}
+
+.camera-preview-actions {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.camera-preview-actions button {
+  flex: 1;
+}
+
+@keyframes cameraFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes photoPop {
+  from { transform: scale(1.04); opacity: 0.8; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes flashAnim {
+  0% { opacity: 0.9; }
+  100% { opacity: 0; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

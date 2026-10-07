@@ -1,59 +1,97 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { LayoutDashboard, PlusCircle, User, LogOut } from 'lucide-react'
+import { LayoutDashboard, Plus, User, LogOut } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
+import { useProfile } from '../../hooks/useProfile'
+import { useAnimals } from '../../hooks/useAnimals'
 import './Layout.css'
 
 export default function AppLayout() {
-  const { signOut } = useAuth()
+  const { signOut, user } = useAuth()
+  const { profile } = useProfile()
+  const { animals } = useAnimals()
+
+  const displayName = profile?.full_name || profile?.username || user?.email?.split('@')[0] || 'Kawan'
+  const initial = displayName.charAt(0).toUpperCase()
 
   return (
     <div className="app-layout">
+      {/* Desktop Sidebar */}
       <aside className="sidebar">
         <div className="sidebar-brand">
-          <span className="brand-icon">🐾</span>
-          <span className="brand-text">StrayDex</span>
+          <div className="brand-logo-wrap">
+            <span className="brand-icon">🐱</span>
+          </div>
+          <div className="brand-text-col">
+            <span className="brand-text">StrayCat</span>
+            <span className="brand-subtext">Cat Collector 🐾</span>
+          </div>
         </div>
 
         <nav className="sidebar-nav">
+          <div className="nav-section-title">Menu Utama</div>
           <NavLink to="/dashboard" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
             <LayoutDashboard size={20} />
             <span>Dashboard</span>
+            {animals.length > 0 && <span className="nav-badge">{animals.length}</span>}
           </NavLink>
           <NavLink to="/add" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-            <PlusCircle size={20} />
-            <span>Tambah Anabul</span>
+            <div className="nav-add-icon">
+              <Plus size={18} />
+            </div>
+            <span>Tambah Kucing</span>
+            <span className="nav-badge-new">Baru</span>
           </NavLink>
           <NavLink to="/profile" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
             <User size={20} />
-            <span>Profil</span>
+            <span>Profil Saya</span>
           </NavLink>
         </nav>
 
+        {/* Sidebar Footer User Widget */}
         <div className="sidebar-footer">
-          <button type="button" className="nav-link logout-btn" onClick={signOut}>
-            <LogOut size={20} />
-            <span>Keluar</span>
-          </button>
+          <div className="user-mini-card">
+            <div className="user-avatar-circle">{initial}</div>
+            <div className="user-text-col">
+              <span className="user-name-text">{displayName}</span>
+              <span className="user-role-text">Pecinta Kucing</span>
+            </div>
+            <button
+              type="button"
+              className="user-logout-icon-btn"
+              onClick={signOut}
+              title="Keluar dari akun"
+            >
+              <LogOut size={18} />
+            </button>
+          </div>
         </div>
       </aside>
 
+      {/* Main Content Area */}
       <main className="main-content">
         <Outlet />
       </main>
 
-      {/* Mobile bottom navigation */}
-      <nav className="mobile-nav">
-        <NavLink to="/dashboard" className={({ isActive }) => `mobile-nav-link ${isActive ? 'active' : ''}`}>
+      {/* Mobile Floating Bottom Navigation */}
+      <nav className="mobile-nav-dock">
+        <NavLink to="/dashboard" className={({ isActive }) => `mobile-nav-item ${isActive ? 'active' : ''}`}>
           <LayoutDashboard size={22} />
           <span>Dashboard</span>
+          <div className="mobile-active-dot" />
         </NavLink>
-        <NavLink to="/add" className={({ isActive }) => `mobile-nav-link ${isActive ? 'active' : ''}`}>
-          <PlusCircle size={22} />
-          <span>Tambah</span>
+
+        {/* Floating Center Action Button */}
+        <NavLink to="/add" className="mobile-fab-center" aria-label="Tambah Kucing Baru">
+          <div className="fab-glow-ring" />
+          <div className="fab-inner-button">
+            <Plus size={26} strokeWidth={2.5} />
+          </div>
         </NavLink>
-        <NavLink to="/profile" className={({ isActive }) => `mobile-nav-link ${isActive ? 'active' : ''}`}>
+
+        <NavLink to="/profile" className={({ isActive }) => `mobile-nav-item ${isActive ? 'active' : ''}`}>
           <User size={22} />
           <span>Profil</span>
+          <div className="mobile-active-dot" />
         </NavLink>
       </nav>
     </div>
