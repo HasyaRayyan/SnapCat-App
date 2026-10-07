@@ -1,0 +1,251 @@
+.profile-page {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.profile-page h1 {
+  font-size: 28px;
+  margin: 0 0 24px;
+  letter-spacing: -0.5px;
+}
+
+/* Profile Card */
+.profile-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 60%, #ff6b6b));
+  color: #fff;
+  font-size: 32px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.profile-info h2 {
+  margin: 0 0 4px;
+  font-size: 24px;
+}
+
+.profile-username {
+  color: var(--accent);
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.profile-bio {
+  color: var(--text);
+  font-size: 14px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.profile-email {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: var(--text);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.profile-stats {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  padding: 16px 0;
+  margin-bottom: 16px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.stat strong {
+  font-size: 24px;
+  color: var(--text-h);
+}
+
+.stat span {
+  font-size: 12px;
+  color: var(--text);
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: left;
+}
+
+.profile-form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.textarea-field {
+  resize: vertical;
+  min-height: 80px;
+  padding-top: 10px !important;
+  font-family: var(--sans);
+}
+
+/* Success message */
+.success-msg {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #22c55e;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Settings */
+.settings-section h3 {
+  font-size: 18px;
+  margin: 0 0 12px;
+  color: var(--text-h);
+}
+
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.setting-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: var(--bg);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s;
+  font-family: var(--sans);
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+
+.setting-item:last-child {
+  border-bottom: none;
+}
+
+.setting-item:hover {
+  background: var(--social-bg);
+}
+
+.setting-item div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.setting-item strong {
+  color: var(--text-h);
+  font-size: 15px;
+}
+
+.setting-item span {
+  font-size: 13px;
+}
+
+.setting-item.danger {
+  color: #ef4444;
+}
+.setting-item.danger strong {
+  color: #ef4444;
+}
+.setting-item.danger:hover {
+  background: rgba(239, 68, 68, 0.05);
+}
+
+/* About Modal */
+.about-content {
+  text-align: center;
+}
+
+.about-logo {
+  font-size: 56px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.about-content h2 {
+  margin: 0 0 4px;
+  font-size: 24px;
+}
+
+.about-tagline {
+  color: var(--text);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.about-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.about-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 16px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.about-row:last-child {
+  border-bottom: none;
+}
+
+.about-row span {
+  color: var(--text);
+}
+
+.about-row strong {
+  color: var(--text-h);
+}
+
+.about-footer {
+  font-size: 13px;
+  color: var(--text);
+}
+
+/* Error reuse */
+.profile-form .auth-error,
+.profile-page .auth-error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #ef4444;
+  font-size: 14px;
+}
