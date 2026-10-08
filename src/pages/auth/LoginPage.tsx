@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { User, Lock, LogIn, Eye, EyeOff, Sparkles } from 'lucide-react'
+import { User, Lock, LogIn, Eye, EyeOff, KeyRound } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { Input } from '../../components/ui/Input'
 import { Button } from '../../components/ui/Button'
@@ -47,10 +47,6 @@ export default function LoginPage() {
 
   return (
     <div className="auth-container">
-      {/* Decorative ambient glowing orbs */}
-      <div className="auth-ambient-glow glow-top" />
-      <div className="auth-ambient-glow glow-bottom" />
-
       <div className="auth-card">
         <div className="auth-header">
           <div className="auth-logo-badge">
@@ -110,7 +106,7 @@ export default function LoginPage() {
             onClick={handleFillDemo}
             title="Klik untuk otomatis mengisi username & password demo"
           >
-            <Sparkles size={15} />
+            <KeyRound size={15} />
             <span>Pakai Akun Demo (admin / Password123)</span>
           </button>
         </form>

@@ -82,7 +82,6 @@ export default function AppLayout() {
 
         {/* Floating Center Action Button */}
         <NavLink to="/add" className="mobile-fab-center" aria-label="Tambah Kucing Baru">
-          <div className="fab-glow-ring" />
           <div className="fab-inner-button">
             <Plus size={26} strokeWidth={2.5} />
           </div>

@@ -16,9 +16,9 @@
   max-width: 540px;
   background: #140d29;
   border: 1px solid rgba(167, 139, 250, 0.3);
-  border-radius: 24px;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 30px rgba(139, 92, 246, 0.25);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
   display: flex;
   flex-direction: column;
 }
@@ -205,9 +205,14 @@
   transform: rotate(180deg);
 }
 
+.camera-tool-btn:focus-visible {
+  outline: 2px solid #a78bfa;
+  outline-offset: 2px;
+}
+
 .camera-shutter-btn {
-  width: 72px;
-  height: 72px;
+  width: 68px;
+  height: 68px;
   border-radius: 50%;
   background: transparent;
   border: 4px solid #ffffff;
@@ -216,24 +221,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+  transition: transform 0.15s ease;
+}
+
+.camera-shutter-btn:focus-visible {
+  outline: 2px solid #a78bfa;
+  outline-offset: 3px;
 }
 
 .camera-shutter-btn:active:not(:disabled) {
-  transform: scale(0.92);
+  transform: scale(0.94);
 }
 
 .shutter-inner {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: linear-gradient(135deg, #a855f7, #7c3aed);
-  transition: background 0.2s;
+  background: #7c3aed;
+  transition: background 0.15s;
 }
 
 .camera-shutter-btn:hover:not(:disabled) .shutter-inner {
-  background: linear-gradient(135deg, #c084fc, #9333ea);
+  background: #6d28d9;
 }
 
 .camera-preview-actions {

@@ -31,7 +31,7 @@
   gap: 10px;
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 18px;
+  border-radius: 14px;
   padding: 20px;
   box-shadow: var(--shadow);
 }
@@ -44,12 +44,12 @@
 
 .photo-camera-trigger {
   border: 2px dashed var(--accent-border);
-  border-radius: 16px;
-  padding: 32px 20px;
+  border-radius: 12px;
+  padding: 28px 20px;
   text-align: center;
   cursor: pointer;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.04), rgba(99, 102, 241, 0.04));
-  transition: all 0.25s ease;
+  background: var(--accent-bg);
+  transition: background 0.15s, border-color 0.15s;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -57,27 +57,25 @@
 
 .photo-camera-trigger:hover {
   border-color: var(--accent);
-  background: var(--accent-bg);
-  transform: translateY(-2px);
-  box-shadow: var(--accent-glow);
+  background: rgba(109, 40, 217, 0.12);
 }
 
 .camera-icon-bubble {
-  width: 68px;
-  height: 68px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  background: var(--accent-gradient);
+  background: var(--accent);
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 12px;
-  box-shadow: 0 8px 20px -2px rgba(124, 58, 237, 0.4);
+  box-shadow: var(--shadow);
 }
 
 .photo-camera-trigger h3 {
   margin: 0 0 4px;
-  font-size: 17px;
+  font-size: 16px;
   color: var(--text-h);
 }
 
@@ -161,7 +159,7 @@
   gap: 12px;
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 18px;
+  border-radius: 14px;
   padding: 20px;
   box-shadow: var(--shadow);
 }

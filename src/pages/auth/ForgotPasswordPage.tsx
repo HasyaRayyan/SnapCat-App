@@ -48,8 +48,6 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="auth-container">
-      <div className="auth-ambient-glow glow-top" />
-      <div className="auth-ambient-glow glow-bottom" />
       <div className="auth-card">
         <div className="auth-header">
           <span className="auth-logo">🔑</span>

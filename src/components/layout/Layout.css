@@ -28,18 +28,18 @@
 }
 
 .brand-logo-wrap {
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
-  background: var(--accent-gradient);
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 18px -4px rgba(124, 58, 237, 0.4);
+  box-shadow: var(--shadow);
 }
 
 .brand-icon {
-  font-size: 24px;
+  font-size: 22px;
 }
 
 .brand-text-col {
@@ -48,17 +48,15 @@
 }
 
 .brand-text {
-  font-size: 21px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  color: var(--text-h);
   line-height: 1.2;
 }
 
 .brand-subtext {
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--text);
   letter-spacing: 0.3px;
@@ -106,13 +104,17 @@
 .nav-link:hover {
   background: var(--social-bg);
   color: var(--text-h);
-  transform: translateX(3px);
+}
+
+.nav-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .nav-link.active {
-  background: var(--accent-gradient);
+  background: var(--accent);
   color: #ffffff;
-  box-shadow: 0 6px 18px -2px rgba(124, 58, 237, 0.4);
+  box-shadow: var(--shadow);
 }
 
 .nav-link.active .nav-badge {
@@ -238,16 +240,14 @@
   display: none;
   position: fixed;
   bottom: 16px;
-  left: 20px;
-  right: 20px;
-  background: rgba(21, 13, 40, 0.88);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(167, 139, 250, 0.25);
-  border-radius: 28px;
+  left: 16px;
+  right: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
   z-index: 1000;
   padding: 8px 16px;
-  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.6), 0 0 20px rgba(139, 92, 246, 0.2);
+  box-shadow: var(--shadow-lg);
   align-items: center;
   justify-content: space-around;
 }
@@ -258,26 +258,31 @@
   align-items: center;
   gap: 3px;
   padding: 6px 12px;
-  color: #a79fc2;
+  color: var(--text);
   text-decoration: none;
   font-size: 11px;
   font-weight: 600;
-  transition: all 0.2s;
+  border-radius: 8px;
+  transition: color 0.15s;
   position: relative;
 }
 
+.mobile-nav-item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .mobile-nav-item.active {
-  color: #ffffff;
+  color: var(--accent);
 }
 
 .mobile-active-dot {
-  width: 5px;
-  height: 5px;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
-  background: #a855f7;
-  box-shadow: 0 0 8px #a855f7;
+  background: var(--accent);
   opacity: 0;
-  transition: opacity 0.2s;
+  transition: opacity 0.15s;
 }
 
 .mobile-nav-item.active .mobile-active-dot {
@@ -287,29 +292,39 @@
 /* Elevated Floating Center Action Button */
 .mobile-fab-center {
   position: relative;
-  top: -18px;
+  top: -16px;
   text-decoration: none;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
+}
+
+.mobile-fab-center:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 
 .fab-inner-button {
-  width: 56px;
-  height: 56px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  background: var(--accent-gradient);
+  background: var(--accent);
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 24px -2px rgba(124, 58, 237, 0.6), 0 0 16px rgba(168, 85, 247, 0.4);
-  border: 3px solid rgba(255, 255, 255, 0.2);
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: var(--shadow-lg);
+  border: 2px solid var(--bg-card);
+  transition: background 0.15s;
+}
+
+.fab-inner-button:hover {
+  background: var(--accent-hover);
 }
 
 .mobile-fab-center:active .fab-inner-button {
-  transform: scale(0.92);
+  transform: scale(0.95);
 }
 
 @media (max-width: 768px) {

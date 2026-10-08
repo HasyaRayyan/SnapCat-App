@@ -25,13 +25,13 @@
 
 /* Spotlight Card */
 .spotlight-card {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(99, 102, 241, 0.08));
-  border: 1px solid var(--accent-border);
-  border-radius: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 14px;
   padding: 24px;
   margin-bottom: 28px;
-  box-shadow: 0 12px 30px -8px rgba(124, 58, 237, 0.15);
-  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow);
 }
 
 .spotlight-header {
@@ -42,7 +42,7 @@
 }
 
 .spotlight-header h2 {
-  font-size: 19px;
+  font-size: 18px;
   margin: 0;
   display: flex;
   align-items: center;
@@ -51,7 +51,7 @@
 
 .spotlight-content {
   display: flex;
-  gap: 22px;
+  gap: 20px;
   align-items: flex-start;
 }
 
@@ -59,9 +59,8 @@
   width: 180px;
   height: 180px;
   object-fit: cover;
-  border-radius: 16px;
-  border: 2px solid var(--accent-border);
-  box-shadow: var(--shadow);
+  border-radius: 10px;
+  border: 1px solid var(--border);
   flex-shrink: 0;
 }
 
@@ -170,16 +169,16 @@
 .animal-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 18px;
+  border-radius: 12px;
   overflow: hidden;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
   box-shadow: var(--shadow);
 }
 
 .animal-card:hover {
-  box-shadow: 0 16px 32px -6px rgba(124, 58, 237, 0.2);
+  box-shadow: var(--shadow-lg);
   border-color: var(--accent-border);
-  transform: translateY(-4px);
+  transform: translateY(-2px);
 }
 
 .card-image-wrapper {
@@ -198,11 +197,10 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(8px);
+  background: rgba(17, 13, 28, 0.85);
   color: #fff;
-  padding: 4px 10px;
-  border-radius: 20px;
+  padding: 4px 8px;
+  border-radius: 6px;
   font-size: 12px;
   display: flex;
   align-items: center;

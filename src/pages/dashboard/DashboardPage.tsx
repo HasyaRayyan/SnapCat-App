@@ -83,7 +83,7 @@ export default function DashboardPage() {
       {/* Random Animal Spotlight */}
       <div className="spotlight-card">
         <div className="spotlight-header">
-          <h2>✨ Anabul Random Hari Ini</h2>
+          <h2>Sorotan Anabul Hari Ini</h2>
           <Button variant="ghost" size="sm" onClick={refreshRandom} icon={<RefreshCw size={16} />}>
             Acak Lagi
           </Button>

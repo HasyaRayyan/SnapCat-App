@@ -75,9 +75,6 @@ export default function RegisterPage() {
   if (success) {
     return (
       <div className="auth-container">
-        <div className="auth-ambient-glow glow-top" />
-        <div className="auth-ambient-glow glow-bottom" />
-
         <div className="auth-card">
           <div className="auth-header">
             <div className="auth-logo-badge">
@@ -108,9 +105,6 @@ export default function RegisterPage() {
 
   return (
     <div className="auth-container">
-      <div className="auth-ambient-glow glow-top" />
-      <div className="auth-ambient-glow glow-bottom" />
-
       <div className="auth-card">
         <div className="auth-header">
           <div className="auth-logo-badge">

@@ -3,18 +3,23 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border: none;
-  border-radius: 10px;
+  border: 1px solid transparent;
+  border-radius: 8px;
   font-family: var(--sans);
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
   text-decoration: none;
   user-select: none;
 }
 
+.btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .btn:active:not(:disabled) {
-  transform: scale(0.97);
+  transform: scale(0.98);
 }
 
 .btn:disabled {
@@ -29,35 +34,31 @@
 
 /* Variants */
 .btn-primary {
-  background: var(--accent-gradient);
+  background: var(--accent);
   color: #ffffff;
-  box-shadow: 0 4px 14px -2px rgba(124, 58, 237, 0.4);
+  box-shadow: var(--shadow);
 }
 .btn-primary:hover:not(:disabled) {
-  background: var(--accent-gradient-hover);
-  box-shadow: 0 8px 20px -2px rgba(124, 58, 237, 0.55);
-  transform: translateY(-1px);
+  background: var(--accent-hover);
 }
 
 .btn-secondary {
   background: var(--accent-bg);
   color: var(--accent);
-  border: 1.5px solid var(--accent-border);
+  border-color: var(--accent-border);
 }
 .btn-secondary:hover:not(:disabled) {
-  background: rgba(139, 92, 246, 0.18);
+  background: rgba(109, 40, 217, 0.15);
   border-color: var(--accent);
-  transform: translateY(-1px);
 }
 
 .btn-danger {
-  background: #ef4444;
-  color: #fff;
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+  background: #dc2626;
+  color: #ffffff;
+  box-shadow: var(--shadow);
 }
 .btn-danger:hover:not(:disabled) {
-  background: #dc2626;
-  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35);
+  background: #b91c1c;
 }
 
 .btn-ghost {
@@ -71,18 +72,18 @@
 
 /* Sizes */
 .btn-sm {
-  padding: 7px 14px;
+  padding: 6px 12px;
   font-size: 13px;
-  border-radius: 8px;
+  border-radius: 6px;
 }
 .btn-md {
-  padding: 10px 20px;
+  padding: 9px 18px;
   font-size: 14px;
 }
 .btn-lg {
-  padding: 13px 26px;
+  padding: 12px 24px;
   font-size: 15px;
-  border-radius: 12px;
+  border-radius: 10px;
 }
 
 .btn-full {
