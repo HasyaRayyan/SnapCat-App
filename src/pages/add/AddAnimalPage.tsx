@@ -1,6 +1,19 @@
 import { useState, useRef, useEffect, type FormEvent, type ChangeEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Camera, MapPin, Save, Plus, Scissors, Type, FileText, Tag, Image as ImageIcon, ExternalLink, AlertTriangle, CheckCircle } from 'lucide-react'
+import {
+  Camera,
+  MapPin,
+  Save,
+  Plus,
+  Scissors,
+  Type,
+  FileText,
+  Tag,
+  Image as ImageIcon,
+  ExternalLink,
+  AlertTriangle,
+  Clock,
+} from 'lucide-react'
 import { format } from 'date-fns'
 import { id as idLocale } from 'date-fns/locale/id'
 import { useAuth } from '../../contexts/AuthContext'
@@ -39,7 +52,7 @@ export default function AddAnimalPage() {
   const [latitude, setLatitude] = useState<number | null>(null)
   const [longitude, setLongitude] = useState<number | null>(null)
   const [locationName, setLocationName] = useState('')
-  const [capturedAt, setCapturedAt] = useState(format(new Date(), "yyyy-MM-dd'T'HH:mm"))
+  const [existingCapturedAt, setExistingCapturedAt] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [loadingEdit, setLoadingEdit] = useState(false)
@@ -72,6 +85,19 @@ export default function AddAnimalPage() {
     }
   }, [types, typeId, isEdit])
 
+  // Automatically fetch GPS location on load for new entry
+  useEffect(() => {
+    if (!isEdit) {
+      getCurrentLocation().then((loc) => {
+        if (loc) {
+          setLatitude(loc.latitude)
+          setLongitude(loc.longitude)
+          setLocationName(loc.locationName)
+        }
+      })
+    }
+  }, [isEdit, getCurrentLocation])
+
   // Load data for edit mode
   useEffect(() => {
     if (editId) {
@@ -91,7 +117,7 @@ export default function AddAnimalPage() {
             setLatitude(animal.latitude)
             setLongitude(animal.longitude)
             setLocationName(animal.location_name ?? '')
-            setCapturedAt(format(new Date(animal.captured_at), "yyyy-MM-dd'T'HH:mm"))
+            setExistingCapturedAt(animal.captured_at)
           }
           setLoadingEdit(false)
         })
@@ -110,7 +136,6 @@ export default function AddAnimalPage() {
     }
     reader.readAsDataURL(file)
 
-    // Auto-fetch location if not set yet
     if (!latitude && !locationName) {
       handleGetLocation()
     }
@@ -122,7 +147,6 @@ export default function AddAnimalPage() {
     setCroppedBlob(null)
     setPhotoPreview(previewUrl)
 
-    // Auto-fetch location when taking photo
     if (!latitude && !locationName) {
       handleGetLocation()
     }
@@ -178,7 +202,6 @@ export default function AddAnimalPage() {
     setIsCropping(false)
   }
 
-  // Draw crop overlay
   useEffect(() => {
     if (!showCrop || !cropImage || !canvasRef.current) return
     const canvas = canvasRef.current
@@ -189,7 +212,6 @@ export default function AddAnimalPage() {
     canvas.height = cropImage.height
     ctx.drawImage(cropImage, 0, 0)
 
-    // Darken outside crop area
     ctx.fillStyle = 'rgba(0,0,0,0.55)'
     ctx.fillRect(0, 0, canvas.width, canvas.height)
 
@@ -198,11 +220,9 @@ export default function AddAnimalPage() {
     const w = Math.abs(cropEnd.x - cropStart.x)
     const h = Math.abs(cropEnd.y - cropStart.y)
 
-    // Draw crop area
     ctx.clearRect(x, y, w, h)
     ctx.drawImage(cropImage, x, y, w, h, x, y, w, h)
 
-    // Border
     ctx.strokeStyle = '#a78bfa'
     ctx.lineWidth = 3
     ctx.strokeRect(x, y, w, h)
@@ -251,9 +271,29 @@ export default function AddAnimalPage() {
     setLoading(true)
 
     try {
-      let photoUrl = photoPreview ?? ''
+      // 1. Lokasi otomatis diambil saat user klik simpan jika belum ada
+      let finalLat = latitude
+      let finalLng = longitude
+      let finalLocName = locationName
 
-      // Upload photo if new file
+      if (!finalLat || !finalLng) {
+        try {
+          const loc = await getCurrentLocation()
+          if (loc) {
+            finalLat = loc.latitude
+            finalLng = loc.longitude
+            finalLocName = loc.locationName
+            setLatitude(loc.latitude)
+            setLongitude(loc.longitude)
+            setLocationName(loc.locationName)
+          }
+        } catch {
+          // Lanjutkan jika GPS tidak diizinkan di browser
+        }
+      }
+
+      // 2. Upload foto
+      let photoUrl = photoPreview ?? ''
       if (photoFile || croppedBlob) {
         const fileToUpload = croppedBlob ?? photoFile!
         const { url, error: uploadError } = await uploadAnimalPhoto(user.id, fileToUpload)
@@ -265,16 +305,25 @@ export default function AddAnimalPage() {
         photoUrl = url
       }
 
+      if (!photoUrl) {
+        setError('Foto anabul wajib diisi! Ambil foto via kamera atau galeri.')
+        setLoading(false)
+        return
+      }
+
+      // 3. Jam & Tanggal diambil saat user klik simpan
+      const saveTimestamp = isEdit && existingCapturedAt ? existingCapturedAt : new Date().toISOString()
+
       if (isEdit && editId) {
         const { error: updateErr } = await updateAnimal(editId, {
           name,
           type_id: typeId,
           description: description || null,
           photo_url: photoUrl,
-          latitude,
-          longitude,
-          location_name: locationName || null,
-          captured_at: new Date(capturedAt).toISOString(),
+          latitude: finalLat,
+          longitude: finalLng,
+          location_name: finalLocName || null,
+          captured_at: saveTimestamp,
         })
         if (updateErr) {
           setError(updateErr.message)
@@ -282,22 +331,16 @@ export default function AddAnimalPage() {
           navigate('/dashboard')
         }
       } else {
-        if (!photoUrl) {
-          setError('Foto anabul wajib diisi! Ambil foto via kamera atau galeri.')
-          setLoading(false)
-          return
-        }
-
         const { error: insertErr } = await addAnimal({
           user_id: user.id,
           name,
           type_id: typeId,
           description: description || null,
           photo_url: photoUrl,
-          latitude,
-          longitude,
-          location_name: locationName || null,
-          captured_at: new Date(capturedAt).toISOString(),
+          latitude: finalLat,
+          longitude: finalLng,
+          location_name: finalLocName || null,
+          captured_at: saveTimestamp,
         })
         if (insertErr) {
           setError(insertErr.message)
@@ -319,7 +362,7 @@ export default function AddAnimalPage() {
       <div className="add-page-header">
         <h1>{isEdit ? '✏️ Edit Data Anabul' : '📸 Tambah Anabul Baru'}</h1>
         <p className="page-subtitle">
-          {isEdit ? 'Perbarui informasi dan lokasi anabul' : 'Abadikan kucing liar yang kamu temui dan simpan lokasinya!'}
+          {isEdit ? 'Perbarui informasi anabul' : 'Abadikan kucing liar yang kamu temui. Waktu & lokasi dicatat otomatis!'}
         </p>
       </div>
 
@@ -367,7 +410,7 @@ export default function AddAnimalPage() {
             <div className="photo-uploader-box">
               <div className="photo-camera-trigger" onClick={() => setShowCameraModal(true)}>
                 <div className="camera-icon-bubble">
-                  <Camera size={36} />
+                  <Camera size={32} />
                 </div>
                 <h3>Ambil Foto via Kamera</h3>
                 <p>Klik di sini untuk membuka kamera langsung</p>
@@ -432,24 +475,25 @@ export default function AddAnimalPage() {
           </div>
         </div>
 
-        {/* Date/Time */}
-        <div className="input-group">
-          <label className="input-label">Tanggal & Jam Ditemukan</label>
-          <input
-            type="datetime-local"
-            className="input-field"
-            value={capturedAt}
-            onChange={(e) => setCapturedAt(e.target.value)}
-          />
-          <span className="input-hint">
-            🗓️ {format(new Date(capturedAt), 'EEEE, dd MMMM yyyy • HH:mm', { locale: idLocale })}
-          </span>
+        {/* Automatic Date/Time (Otomatis diambil saat user klik simpan) */}
+        <div className="auto-info-card">
+          <div className="auto-info-icon">
+            <Clock size={20} />
+          </div>
+          <div className="auto-info-text">
+            <span className="auto-info-title">Waktu & Tanggal Foto</span>
+            <span className="auto-info-desc">
+              {isEdit && existingCapturedAt
+                ? `Tercatat: ${format(new Date(existingCapturedAt), 'EEEE, dd MMMM yyyy • HH:mm', { locale: idLocale })}`
+                : 'Otomatis dicatat tepat saat tombol Simpan ditekan'}
+            </span>
+          </div>
         </div>
 
-        {/* Location Section */}
+        {/* Automatic Location (Otomatis GPS, tidak input manual) */}
         <div className="location-card-section">
           <div className="location-header-row">
-            <label className="input-label">📍 Lokasi Anabul</label>
+            <label className="input-label">📍 Lokasi GPS (Otomatis)</label>
             <Button
               type="button"
               variant="secondary"
@@ -458,7 +502,7 @@ export default function AddAnimalPage() {
               loading={locationLoading}
               icon={<MapPin size={16} />}
             >
-              {latitude ? 'Perbarui Lokasi GPS' : 'Ambil Lokasi GPS Sekarang'}
+              {latitude ? 'Perbarui GPS' : 'Deteksi GPS Sekarang'}
             </Button>
           </div>
 
@@ -469,20 +513,21 @@ export default function AddAnimalPage() {
             </div>
           )}
 
-          <div className="input-group">
-            <Input
-              placeholder="Nama lokasi / alamat (misal: Jl. Mawar No. 5, depan warung)"
-              value={locationName}
-              onChange={(e) => setLocationName(e.target.value)}
-              icon={<MapPin size={18} />}
-            />
-          </div>
-
-          {latitude && longitude && (
-            <div className="location-badge-box">
-              <div className="location-status-badge">
-                <CheckCircle size={15} />
-                <span>GPS Tersimpan ({latitude.toFixed(5)}, {longitude.toFixed(5)})</span>
+          {locationLoading ? (
+            <div className="location-detecting-box">
+              <LoadingSpinner size={20} />
+              <span>Mendeteksi koordinat GPS dan nama lokasi otomatis...</span>
+            </div>
+          ) : latitude && longitude ? (
+            <div className="location-detected-card">
+              <div className="location-address-row">
+                <MapPin size={20} className="location-pin-icon" />
+                <div className="location-address-text">
+                  <span className="location-name-bold">{locationName || 'Lokasi terdeteksi'}</span>
+                  <span className="location-coords-small">
+                    Koordinat: {latitude.toFixed(5)}, {longitude.toFixed(5)}
+                  </span>
+                </div>
               </div>
               <a
                 href={`https://www.google.com/maps?q=${latitude},${longitude}`}
@@ -490,9 +535,16 @@ export default function AddAnimalPage() {
                 rel="noopener noreferrer"
                 className="location-maps-link"
               >
-                <span>Lihat di Google Maps</span>
+                <span>Buka di Google Maps</span>
                 <ExternalLink size={14} />
               </a>
+            </div>
+          ) : (
+            <div className="location-pending-box">
+              <MapPin size={18} />
+              <span>
+                Lokasi otomatis dideteksi dari GPS saat Anda menekan tombol Simpan (atau klik tombol Deteksi di atas).
+              </span>
             </div>
           )}
         </div>
