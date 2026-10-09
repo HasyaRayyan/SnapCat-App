@@ -13,6 +13,11 @@ import {
   ExternalLink,
   AlertTriangle,
   Clock,
+  Crop,
+  Square,
+  RectangleHorizontal,
+  Maximize2,
+  RotateCcw,
 } from 'lucide-react'
 import { format } from 'date-fns'
 import { id as idLocale } from 'date-fns/locale/id'
@@ -48,7 +53,9 @@ export default function AddAnimalPage() {
   const [description, setDescription] = useState('')
   const [photoFile, setPhotoFile] = useState<File | null>(null)
   const [photoPreview, setPhotoPreview] = useState<string | null>(null)
+  const [originalPhoto, setOriginalPhoto] = useState<string | null>(null)
   const [croppedBlob, setCroppedBlob] = useState<Blob | null>(null)
+  const [activeCropRatio, setActiveCropRatio] = useState<'original' | '1:1' | '4:3' | '16:9' | 'custom'>('original')
   const [latitude, setLatitude] = useState<number | null>(null)
   const [longitude, setLongitude] = useState<number | null>(null)
   const [locationName, setLocationName] = useState('')
@@ -113,6 +120,8 @@ export default function AddAnimalPage() {
             setTypeId(animal.type_id)
             setDescription(animal.description ?? '')
             setPhotoPreview(animal.photo_url)
+            setOriginalPhoto(animal.photo_url)
+            setActiveCropRatio('original')
             setLatitude(animal.latitude)
             setLongitude(animal.longitude)
             setLocationName(animal.location_name ?? '')
@@ -129,9 +138,12 @@ export default function AddAnimalPage() {
 
     setPhotoFile(file)
     setCroppedBlob(null)
+    setActiveCropRatio('original')
     const reader = new FileReader()
     reader.onloadend = () => {
-      setPhotoPreview(reader.result as string)
+      const url = reader.result as string
+      setPhotoPreview(url)
+      setOriginalPhoto(url)
     }
     reader.readAsDataURL(file)
 
@@ -145,6 +157,8 @@ export default function AddAnimalPage() {
     setPhotoFile(file)
     setCroppedBlob(null)
     setPhotoPreview(previewUrl)
+    setOriginalPhoto(previewUrl)
+    setActiveCropRatio('original')
 
     if (!latitude && !locationName) {
       handleGetLocation()
@@ -161,16 +175,108 @@ export default function AddAnimalPage() {
   }
 
   // Crop functionality
-  const openCropModal = () => {
-    if (!photoPreview) return
+  const handleAutoCrop = (ratioKey: '1:1' | '4:3' | '16:9' | 'original') => {
+    const sourceUrl = originalPhoto || photoPreview
+    if (!sourceUrl) return
+
+    if (ratioKey === 'original') {
+      setCroppedBlob(null)
+      if (originalPhoto) {
+        setPhotoPreview(originalPhoto)
+      }
+      setActiveCropRatio('original')
+      return
+    }
+
     const img = new Image()
+    img.crossOrigin = 'anonymous'
+    img.onload = () => {
+      const targetRatio = ratioKey === '1:1' ? 1 : ratioKey === '4:3' ? 4 / 3 : 16 / 9
+      const imgRatio = img.width / img.height
+
+      let cropW = img.width
+      let cropH = img.height
+      let cropX = 0
+      let cropY = 0
+
+      if (imgRatio > targetRatio) {
+        cropH = img.height
+        cropW = img.height * targetRatio
+        cropX = (img.width - cropW) / 2
+        cropY = 0
+      } else {
+        cropW = img.width
+        cropH = img.width / targetRatio
+        cropX = 0
+        cropY = (img.height - cropH) / 2
+      }
+
+      const canvas = document.createElement('canvas')
+      canvas.width = Math.round(cropW)
+      canvas.height = Math.round(cropH)
+      const ctx = canvas.getContext('2d')
+      if (!ctx) return
+
+      ctx.drawImage(
+        img,
+        Math.round(cropX),
+        Math.round(cropY),
+        Math.round(cropW),
+        Math.round(cropH),
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      )
+
+      canvas.toBlob((blob) => {
+        if (blob) {
+          setCroppedBlob(blob)
+          setPhotoPreview(URL.createObjectURL(blob))
+          setActiveCropRatio(ratioKey)
+        }
+      }, 'image/jpeg', 0.92)
+    }
+    img.src = sourceUrl
+  }
+
+  const openCropModal = () => {
+    const sourceUrl = originalPhoto || photoPreview
+    if (!sourceUrl) return
+    const img = new Image()
+    img.crossOrigin = 'anonymous'
     img.onload = () => {
       setCropImage(img)
       setShowCrop(true)
-      setCropStart({ x: img.width * 0.1, y: img.height * 0.1 })
-      setCropEnd({ x: img.width * 0.9, y: img.height * 0.9 })
+      const w = img.width * 0.8
+      const h = img.height * 0.8
+      setCropStart({ x: (img.width - w) / 2, y: (img.height - h) / 2 })
+      setCropEnd({ x: (img.width + w) / 2, y: (img.height + h) / 2 })
     }
-    img.src = photoPreview
+    img.src = sourceUrl
+  }
+
+  const applyPresetToCropModal = (ratio: number | null) => {
+    if (!cropImage) return
+    if (!ratio) {
+      setCropStart({ x: 0, y: 0 })
+      setCropEnd({ x: cropImage.width, y: cropImage.height })
+      return
+    }
+    const imgRatio = cropImage.width / cropImage.height
+    let w = cropImage.width
+    let h = cropImage.height
+    if (imgRatio > ratio) {
+      w = cropImage.height * ratio
+      h = cropImage.height
+    } else {
+      w = cropImage.width
+      h = cropImage.width / ratio
+    }
+    const x = (cropImage.width - w) / 2
+    const y = (cropImage.height - h) / 2
+    setCropStart({ x, y })
+    setCropEnd({ x: x + w, y: y + h })
   }
 
   const handleCropMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -235,19 +341,20 @@ export default function AddAnimalPage() {
     const w = Math.abs(cropEnd.x - cropStart.x)
     const h = Math.abs(cropEnd.y - cropStart.y)
 
-    tempCanvas.width = w
-    tempCanvas.height = h
+    tempCanvas.width = Math.max(1, w)
+    tempCanvas.height = Math.max(1, h)
     const ctx = tempCanvas.getContext('2d')
     if (!ctx) return
 
-    ctx.drawImage(cropImage, x, y, w, h, 0, 0, w, h)
+    ctx.drawImage(cropImage, x, y, w, h, 0, 0, tempCanvas.width, tempCanvas.height)
     tempCanvas.toBlob((blob) => {
       if (blob) {
         setCroppedBlob(blob)
         setPhotoPreview(URL.createObjectURL(blob))
+        setActiveCropRatio('custom')
         setShowCrop(false)
       }
-    }, 'image/jpeg', 0.9)
+    }, 'image/jpeg', 0.92)
   }
 
   const handleAddType = async () => {
@@ -373,11 +480,91 @@ export default function AddAnimalPage() {
 
           {photoPreview ? (
             <div className="photo-preview-wrapper">
-              <img src={photoPreview} alt="Preview Anabul" className="photo-preview" />
+              <div className="photo-preview-container">
+                <img src={photoPreview} alt="Preview Anabul" className="photo-preview" />
+                <span className="photo-ratio-badge">
+                  {activeCropRatio === '1:1' && '1:1'}
+                  {activeCropRatio === '4:3' && '4:3'}
+                  {activeCropRatio === '16:9' && '16:9'}
+                  {activeCropRatio === 'custom' && 'Kustom'}
+                  {activeCropRatio === 'original' && 'Asli'}
+                </span>
+              </div>
+
+              {/* Section Crop Otomatis */}
+              <div className="auto-crop-section">
+                <div className="auto-crop-header">
+                  <div className="auto-crop-title">
+                    <Crop size={16} />
+                    <span>Crop & Rasio Otomatis</span>
+                  </div>
+                  <span className="auto-crop-status">
+                    Rasio aktif: <strong>{activeCropRatio === '1:1' ? '1:1 Persegi' : activeCropRatio === '4:3' ? '4:3 Standar' : activeCropRatio === '16:9' ? '16:9 Lebar' : activeCropRatio === 'custom' ? 'Kustom' : 'Foto Asli'}</strong>
+                  </span>
+                </div>
+
+                <div className="auto-crop-buttons-grid">
+                  <button
+                    type="button"
+                    className={`crop-ratio-btn ${activeCropRatio === '1:1' ? 'active' : ''}`}
+                    onClick={() => handleAutoCrop('1:1')}
+                    title="Crop otomatis tengah rasio 1:1 persegi"
+                  >
+                    <Square size={16} />
+                    <span className="crop-btn-label">1:1</span>
+                    <span className="crop-btn-sub">Persegi</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className={`crop-ratio-btn ${activeCropRatio === '4:3' ? 'active' : ''}`}
+                    onClick={() => handleAutoCrop('4:3')}
+                    title="Crop otomatis tengah rasio 4:3 kartu"
+                  >
+                    <RectangleHorizontal size={16} />
+                    <span className="crop-btn-label">4:3</span>
+                    <span className="crop-btn-sub">Kartu</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className={`crop-ratio-btn ${activeCropRatio === '16:9' ? 'active' : ''}`}
+                    onClick={() => handleAutoCrop('16:9')}
+                    title="Crop otomatis tengah rasio 16:9 lebar"
+                  >
+                    <Maximize2 size={16} />
+                    <span className="crop-btn-label">16:9</span>
+                    <span className="crop-btn-sub">Lansekap</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className={`crop-ratio-btn ${activeCropRatio === 'original' ? 'active' : ''}`}
+                    onClick={() => handleAutoCrop('original')}
+                    title="Kembalikan ke ukuran foto asli"
+                  >
+                    <RotateCcw size={16} />
+                    <span className="crop-btn-label">Asli</span>
+                    <span className="crop-btn-sub">Reset</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className={`crop-ratio-btn manual ${activeCropRatio === 'custom' ? 'active' : ''}`}
+                    onClick={openCropModal}
+                    title="Atur area crop manual dengan kursor"
+                  >
+                    <Scissors size={16} />
+                    <span className="crop-btn-label">Manual</span>
+                    <span className="crop-btn-sub">Atur Geser</span>
+                  </button>
+                </div>
+              </div>
+
               <div className="photo-actions-bar">
                 <Button
                   type="button"
-                  variant="primary"
+                  variant="secondary"
                   size="sm"
                   onClick={() => setShowCameraModal(true)}
                   icon={<Camera size={16} />}
@@ -392,15 +579,6 @@ export default function AddAnimalPage() {
                   icon={<ImageIcon size={16} />}
                 >
                   Pilih Galeri
-                </Button>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  size="sm"
-                  onClick={openCropModal}
-                  icon={<Scissors size={16} />}
-                >
-                  Crop
                 </Button>
               </div>
             </div>
@@ -593,7 +771,24 @@ export default function AddAnimalPage() {
       {/* Crop Modal */}
       <Modal isOpen={showCrop} onClose={() => setShowCrop(false)} title="Crop Foto Anabul" size="lg">
         <div className="crop-container">
-          <p className="crop-hint">Geser kursor untuk menentukan area crop:</p>
+          <div className="crop-modal-presets">
+            <span className="crop-presets-label">Preset Rasio Cepat:</span>
+            <div className="crop-presets-buttons">
+              <Button type="button" variant="secondary" size="sm" onClick={() => applyPresetToCropModal(1)}>
+                1:1 Persegi
+              </Button>
+              <Button type="button" variant="secondary" size="sm" onClick={() => applyPresetToCropModal(4 / 3)}>
+                4:3 Standar
+              </Button>
+              <Button type="button" variant="secondary" size="sm" onClick={() => applyPresetToCropModal(16 / 9)}>
+                16:9 Lebar
+              </Button>
+              <Button type="button" variant="secondary" size="sm" onClick={() => applyPresetToCropModal(null)}>
+                Penuh
+              </Button>
+            </div>
+          </div>
+          <p className="crop-hint">Tarik atau geser area seleksi pada foto untuk menyesuaikan area potong:</p>
           <canvas
             ref={canvasRef}
             className="crop-canvas"
