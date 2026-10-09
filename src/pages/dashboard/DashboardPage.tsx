@@ -92,7 +92,11 @@ export default function DashboardPage() {
           <LoadingSpinner size={24} />
         ) : randomAnimal ? (
           <div className="spotlight-content">
-            <img src={randomAnimal.photo_url} alt={randomAnimal.name} className="spotlight-photo" />
+            <img
+              src={randomAnimal.photo_no_bg_url || randomAnimal.photo_url}
+              alt={randomAnimal.name}
+              className={`spotlight-photo ${randomAnimal.photo_no_bg_url ? 'is-cutout' : ''}`}
+            />
             <div className="spotlight-info">
               <h3>{randomAnimal.name}</h3>
               <span className="animal-badge">
@@ -186,7 +190,11 @@ export default function DashboardPage() {
           {animals.map((animal) => (
             <div key={animal.id} className="animal-card">
               <div className="card-image-wrapper">
-                <img src={animal.photo_url} alt={animal.name} className="card-image" />
+                <img
+                  src={animal.photo_no_bg_url || animal.photo_url}
+                  alt={animal.name}
+                  className={`card-image ${animal.photo_no_bg_url ? 'is-cutout' : ''}`}
+                />
                 <span className="card-badge">{animal.animal_types?.name}</span>
               </div>
               <div className="card-body">
@@ -221,7 +229,11 @@ export default function DashboardPage() {
       <Modal isOpen={showDetail} onClose={() => setShowDetail(false)} title={selectedAnimal?.name ?? ''} size="lg">
         {selectedAnimal && (
           <div className="detail-content">
-            <img src={selectedAnimal.photo_no_bg_url || selectedAnimal.photo_url} alt={selectedAnimal.name} className="detail-photo" />
+            <img
+              src={selectedAnimal.photo_no_bg_url || selectedAnimal.photo_url}
+              alt={selectedAnimal.name}
+              className={`detail-photo ${selectedAnimal.photo_no_bg_url ? 'is-cutout' : ''}`}
+            />
             <div className="detail-info">
               <div className="detail-row">
                 <strong>Jenis:</strong> {selectedAnimal.animal_types?.name}
