@@ -39,7 +39,8 @@
 
 .auth-brand-name {
   font-size: 26px;
-  font-weight: 700;
+  font-weight: 300;
+  letter-spacing: -0.5px;
   margin: 0 0 6px;
   color: var(--text-h);
 }
@@ -167,7 +168,7 @@
 }
 
 .demo-account-chip:hover {
-  background: rgba(109, 40, 217, 0.14);
+  background: rgba(21, 128, 61, 0.14);
   border-color: var(--accent);
 }
 

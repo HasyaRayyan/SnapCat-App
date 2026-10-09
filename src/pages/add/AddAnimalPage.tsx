@@ -63,7 +63,6 @@ export default function AddAnimalPage() {
   // New type modal
   const [showNewType, setShowNewType] = useState(false)
   const [newTypeName, setNewTypeName] = useState('')
-  const [newTypeIcon, setNewTypeIcon] = useState('')
   const [addingType, setAddingType] = useState(false)
 
   // Crop modal
@@ -223,7 +222,7 @@ export default function AddAnimalPage() {
     ctx.clearRect(x, y, w, h)
     ctx.drawImage(cropImage, x, y, w, h, x, y, w, h)
 
-    ctx.strokeStyle = '#a78bfa'
+    ctx.strokeStyle = '#15803d'
     ctx.lineWidth = 3
     ctx.strokeRect(x, y, w, h)
   }, [showCrop, cropImage, cropStart, cropEnd])
@@ -254,12 +253,11 @@ export default function AddAnimalPage() {
   const handleAddType = async () => {
     if (!newTypeName.trim()) return
     setAddingType(true)
-    const { data } = await addType({ name: newTypeName.trim(), icon: newTypeIcon || '🐾' })
+    const { data } = await addType({ name: newTypeName.trim(), icon: '' })
     if (data && 'id' in data) {
       setTypeId(data.id)
     }
     setNewTypeName('')
-    setNewTypeIcon('')
     setShowNewType(false)
     setAddingType(false)
   }
@@ -360,7 +358,7 @@ export default function AddAnimalPage() {
   return (
     <div className="add-animal">
       <div className="add-page-header">
-        <h1>{isEdit ? '✏️ Edit Data Anabul' : '📸 Tambah Anabul Baru'}</h1>
+        <h1>{isEdit ? 'Edit Data Anabul' : 'Tambah Anabul Baru'}</h1>
         <p className="page-subtitle">
           {isEdit ? 'Perbarui informasi anabul' : 'Abadikan kucing liar yang kamu temui. Waktu & lokasi dicatat otomatis!'}
         </p>
@@ -459,7 +457,7 @@ export default function AddAnimalPage() {
               <option value="">Pilih jenis...</option>
               {types.map((t) => (
                 <option key={t.id} value={t.id}>
-                  {t.icon} {t.name}
+                  {t.name}
                 </option>
               ))}
             </select>
@@ -493,7 +491,7 @@ export default function AddAnimalPage() {
         {/* Automatic Location (Otomatis GPS, tidak input manual) */}
         <div className="location-card-section">
           <div className="location-header-row">
-            <label className="input-label">📍 Lokasi GPS (Otomatis)</label>
+            <label className="input-label">Lokasi GPS (Otomatis)</label>
             <Button
               type="button"
               variant="secondary"
@@ -565,7 +563,7 @@ export default function AddAnimalPage() {
         </div>
 
         <Button type="submit" loading={loading} fullWidth size="lg" icon={<Save size={20} />}>
-          {isEdit ? 'Simpan Perubahan' : 'Simpan ke StrayCat 🐾'}
+          {isEdit ? 'Simpan Perubahan' : 'Simpan ke StrayCat'}
         </Button>
       </form>
 
@@ -585,13 +583,6 @@ export default function AddAnimalPage() {
             value={newTypeName}
             onChange={(e) => setNewTypeName(e.target.value)}
             icon={<Tag size={18} />}
-          />
-          <Input
-            label="Emoji Icon"
-            placeholder="🐱"
-            value={newTypeIcon}
-            onChange={(e) => setNewTypeIcon(e.target.value)}
-            maxLength={4}
           />
           <Button onClick={handleAddType} loading={addingType} fullWidth icon={<Plus size={18} />}>
             Simpan Jenis

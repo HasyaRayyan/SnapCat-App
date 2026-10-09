@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { Mail, Send } from 'lucide-react'
+import { Mail, Send, KeyRound } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { Input } from '../../components/ui/Input'
 import { Button } from '../../components/ui/Button'
@@ -32,9 +32,11 @@ export default function ForgotPasswordPage() {
       <div className="auth-container">
         <div className="auth-card">
           <div className="auth-header">
-            <span className="auth-logo">📧</span>
-            <h1>Email Terkirim!</h1>
-            <p>Cek inbox email <strong>{email}</strong> untuk link reset password.</p>
+            <div className="auth-logo-badge">
+              <Mail size={24} color="#ffffff" strokeWidth={1.75} />
+            </div>
+            <h1 className="auth-brand-name">Email Terkirim</h1>
+            <p className="auth-brand-desc">Cek inbox email <strong>{email}</strong> untuk link reset password.</p>
           </div>
           <div className="auth-footer">
             <p>
@@ -50,9 +52,11 @@ export default function ForgotPasswordPage() {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <span className="auth-logo">🔑</span>
-          <h1>Lupa Password</h1>
-          <p>Masukkan email kamu untuk reset password</p>
+          <div className="auth-logo-badge">
+            <KeyRound size={24} color="#ffffff" strokeWidth={1.75} />
+          </div>
+          <h1 className="auth-brand-name">Lupa Password</h1>
+          <p className="auth-brand-desc">Masukkan email kamu untuk reset password</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">

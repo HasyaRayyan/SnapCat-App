@@ -42,9 +42,11 @@ export default function UpdatePasswordPage() {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <span className="auth-logo">🔐</span>
-          <h1>Password Baru</h1>
-          <p>Masukkan password baru kamu</p>
+          <div className="auth-logo-badge">
+            <Lock size={24} color="#ffffff" strokeWidth={1.75} />
+          </div>
+          <h1 className="auth-brand-name">Password Baru</h1>
+          <p className="auth-brand-desc">Masukkan password baru kamu</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">

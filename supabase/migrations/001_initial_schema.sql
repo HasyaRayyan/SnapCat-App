@@ -96,14 +96,14 @@ create index if not exists idx_profiles_username on public.profiles(lower(userna
 
 -- 7. Data Default Jenis Anabul
 insert into public.animal_types (name, icon) values
-  ('Kucing', '🐱'),
-  ('Anjing', '🐶'),
-  ('Kelinci', '🐰'),
-  ('Hamster', '🐹'),
-  ('Burung', '🐦'),
-  ('Ikan', '🐟'),
-  ('Kura-kura', '🐢'),
-  ('Lainnya', '🐾')
+  ('Kucing', ''),
+  ('Anjing', ''),
+  ('Kelinci', ''),
+  ('Hamster', ''),
+  ('Burung', ''),
+  ('Ikan', ''),
+  ('Kura-kura', ''),
+  ('Lainnya', '')
 on conflict (name) do nothing;
 
 -- 8. Fungsi Helper Login: Mendapatkan Email Berdasarkan Username (Security Definer)

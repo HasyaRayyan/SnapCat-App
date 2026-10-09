@@ -1,27 +1,27 @@
-:root {
-  --text: #4b4458;
-  --text-h: #181226;
-  --bg: #f8f6fb;
-  --bg-card: #ffffff;
-  --border: #e6dfef;
-  --code-bg: #f2ecf9;
-  --accent: #6d28d9;
-  --accent-hover: #5b21b6;
-  --accent-active: #4c1d95;
-  --accent-gradient: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
-  --accent-gradient-hover: linear-gradient(135deg, #6d28d9 0%, #5b21b6 100%);
-  --accent-bg: rgba(109, 40, 217, 0.08);
-  --accent-border: rgba(109, 40, 217, 0.22);
-  --social-bg: #efe8f7;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-lg: 0 4px 14px -2px rgba(0, 0, 0, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700&display=swap');
 
-  --sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --heading: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+:root {
+  --text: #2c3830;
+  --text-h: #0b1a10;
+  --bg: #fbfdfb;
+  --bg-card: #ffffff;
+  --border: #e1e7e2;
+  --code-bg: #f0f4f1;
+  --accent: #15803d;
+  --accent-hover: #166534;
+  --accent-active: #14532d;
+  --accent-bg: #f0fdf4;
+  --accent-border: #bbf7d0;
+  --social-bg: #f3f7f4;
+  --shadow: 0 1px 3px rgba(11, 26, 16, 0.05), 0 1px 2px rgba(11, 26, 16, 0.03);
+  --shadow-lg: 0 4px 16px -2px rgba(11, 26, 16, 0.08), 0 2px 6px -1px rgba(11, 26, 16, 0.04);
+
+  --sans: 'Montserrat', system-ui, -apple-system, sans-serif;
+  --heading: 'Montserrat', system-ui, -apple-system, sans-serif;
   --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  font: 16px/150% var(--sans);
-  letter-spacing: 0.15px;
+  font: 300 15px/160% var(--sans);
+  letter-spacing: 0.1px;
   color-scheme: light dark;
   color: var(--text);
   background: var(--bg);
@@ -33,22 +33,20 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #a8a0b7;
-    --text-h: #f7f5fb;
-    --bg: #110d1c;
-    --bg-card: #181326;
-    --border: #29213b;
-    --code-bg: #211a33;
-    --accent: #9061f9;
-    --accent-hover: #a47cfb;
-    --accent-active: #7e43f6;
-    --accent-gradient: linear-gradient(135deg, #9061f9 0%, #7e43f6 100%);
-    --accent-gradient-hover: linear-gradient(135deg, #a47cfb 0%, #9061f9 100%);
-    --accent-bg: rgba(144, 97, 249, 0.12);
-    --accent-border: rgba(144, 97, 249, 0.28);
-    --social-bg: #221a36;
-    --shadow: 0 1px 3px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.25);
-    --shadow-lg: 0 6px 18px -3px rgba(0, 0, 0, 0.5);
+    --text: #a1b5a6;
+    --text-h: #f2f8f4;
+    --bg: #09120c;
+    --bg-card: #101c13;
+    --border: #1c2e21;
+    --code-bg: #15241a;
+    --accent: #22c55e;
+    --accent-hover: #16a34a;
+    --accent-active: #15803d;
+    --accent-bg: rgba(34, 197, 94, 0.1);
+    --accent-border: rgba(34, 197, 94, 0.25);
+    --social-bg: #152219;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 6px 18px -3px rgba(0, 0, 0, 0.55);
   }
 }
 
@@ -62,26 +60,29 @@ body {
   min-height: 100vh;
 }
 
-h1, h2, h3 {
+h1, h2, h3, h4 {
   font-family: var(--heading);
-  font-weight: 700;
+  font-weight: 300;
   color: var(--text-h);
+  letter-spacing: -0.3px;
 }
 
 h1 {
   font-size: 28px;
-  letter-spacing: -0.6px;
+  font-weight: 200;
+  letter-spacing: -0.5px;
   margin: 0 0 8px;
 }
 
 h2 {
   font-size: 20px;
-  letter-spacing: -0.3px;
+  font-weight: 300;
   margin: 0 0 8px;
 }
 
 h3 {
   font-size: 16px;
+  font-weight: 400;
   margin: 0 0 4px;
 }
 
@@ -92,7 +93,7 @@ p {
 a {
   color: var(--accent);
   text-decoration: none;
-  transition: color 0.2s;
+  transition: color 0.15s;
 }
 
 a:hover {
@@ -101,17 +102,16 @@ a:hover {
 
 code {
   font-family: var(--mono);
-  font-size: 14px;
+  font-size: 13px;
   padding: 2px 6px;
   background: var(--code-bg);
-  border-radius: 6px;
+  border-radius: 4px;
   border: 1px solid var(--border);
 }
 
-/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -120,7 +120,7 @@ code {
 
 ::-webkit-scrollbar-thumb {
   background: var(--border);
-  border-radius: 999px;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {

@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Mail, Lock, User, UserPlus, CheckCircle2, Circle, Eye, EyeOff } from 'lucide-react'
+import { Mail, Lock, User, UserPlus, CheckCircle2, Circle, Eye, EyeOff, Cat } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { Input } from '../../components/ui/Input'
 import { Button } from '../../components/ui/Button'
@@ -78,7 +78,7 @@ export default function RegisterPage() {
         <div className="auth-card">
           <div className="auth-header">
             <div className="auth-logo-badge">
-              <span className="auth-logo-emoji">🎉</span>
+              <CheckCircle2 size={26} color="#ffffff" strokeWidth={1.75} />
             </div>
             <h1 className="auth-brand-name">Pendaftaran Berhasil!</h1>
             <p className="auth-brand-desc">
@@ -108,7 +108,7 @@ export default function RegisterPage() {
       <div className="auth-card">
         <div className="auth-header">
           <div className="auth-logo-badge">
-            <span className="auth-logo-emoji">🐱</span>
+            <Cat size={26} color="#ffffff" strokeWidth={1.75} />
           </div>
           <h1 className="auth-brand-name">Daftar StrayCat</h1>
           <p className="auth-brand-desc">Mulai petualangan koleksi kucing liar!</p>

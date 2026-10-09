@@ -197,7 +197,7 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  background: rgba(17, 13, 28, 0.85);
+  background: rgba(20, 35, 25, 0.85);
   color: #fff;
   padding: 4px 8px;
   border-radius: 6px;
@@ -266,8 +266,14 @@
 }
 
 .empty-icon {
-  font-size: 56px;
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: var(--social-bg);
+  color: var(--accent);
   margin-bottom: 16px;
 }
 

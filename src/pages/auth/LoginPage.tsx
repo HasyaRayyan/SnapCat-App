@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { User, Lock, LogIn, Eye, EyeOff, KeyRound } from 'lucide-react'
+import { User, Lock, LogIn, Eye, EyeOff, KeyRound, Cat } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { Input } from '../../components/ui/Input'
 import { Button } from '../../components/ui/Button'
@@ -50,10 +50,10 @@ export default function LoginPage() {
       <div className="auth-card">
         <div className="auth-header">
           <div className="auth-logo-badge">
-            <span className="auth-logo-emoji">🐱</span>
+            <Cat size={26} color="#ffffff" strokeWidth={1.75} />
           </div>
           <h1 className="auth-brand-name">StrayCat</h1>
-          <p className="auth-brand-desc">Koleksi & Catat Kucing Liar yang Kamu Temui 🐾</p>
+          <p className="auth-brand-desc">Koleksi dan Catat Kucing Liar yang Kamu Temui</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">

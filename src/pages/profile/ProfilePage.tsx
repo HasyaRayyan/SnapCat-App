@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { User, Mail, FileText, Lock, Save, Info, Shield } from 'lucide-react'
+import { User, Mail, FileText, Lock, Save, Info, Shield, Cat } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { useProfile } from '../../hooks/useProfile'
 import { useAnimals } from '../../hooks/useAnimals'
@@ -99,7 +99,7 @@ export default function ProfilePage() {
 
   return (
     <div className="profile-page">
-      <h1>👤 Profil Saya</h1>
+      <h1>Profil Saya</h1>
 
       {/* Profile Card */}
       <div className="profile-card">
@@ -189,7 +189,7 @@ export default function ProfilePage() {
             <Info size={20} />
             <div>
               <strong>Tentang Aplikasi</strong>
-              <span>Versi dan informasi StrayDex</span>
+              <span>Versi dan informasi StrayCat</span>
             </div>
           </button>
           <button type="button" className="setting-item danger" onClick={signOut}>
@@ -235,7 +235,9 @@ export default function ProfilePage() {
       {/* About Modal */}
       <Modal isOpen={showAbout} onClose={() => setShowAbout(false)} title="Tentang StrayCat" size="sm">
         <div className="about-content">
-          <span className="about-logo">🐱</span>
+          <div className="about-logo">
+            <Cat size={28} strokeWidth={1.75} />
+          </div>
           <h2>StrayCat</h2>
           <p className="about-tagline">Koleksi Kucing & Anabul Liar yang Kamu Temui</p>
           <div className="about-details">
@@ -257,7 +259,7 @@ export default function ProfilePage() {
             </div>
           </div>
           <p className="about-footer">
-            Dibuat dengan 💜 untuk para pecinta kucing liar
+            Dibuat untuk para pecinta kucing liar
           </p>
         </div>
       </Modal>

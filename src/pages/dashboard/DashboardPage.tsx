@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { MapPin, Calendar, RefreshCw, PlusCircle, Search, Filter, ChevronDown, Pencil, Trash2, Eye } from 'lucide-react'
+import { MapPin, Calendar, RefreshCw, PlusCircle, Search, Filter, ChevronDown, Pencil, Trash2, Eye, Cat, ExternalLink } from 'lucide-react'
 import { format } from 'date-fns'
 import { id } from 'date-fns/locale/id'
 import { useAnimals } from '../../hooks/useAnimals'
@@ -72,8 +72,8 @@ export default function DashboardPage() {
     <div className="dashboard">
       <div className="dashboard-header">
         <div>
-          <h1>{greeting()}, {profile?.full_name ?? 'Teman'}! 👋</h1>
-          <p className="subtitle">Kamu sudah mengoleksi <strong>{animals.length}</strong> kucing & anabul di StrayCat 🐾</p>
+          <h1>{greeting()}, {profile?.full_name ?? 'Teman'}</h1>
+          <p className="subtitle">Tercatat <strong>{animals.length}</strong> kucing di StrayCat</p>
         </div>
         <Link to="/add">
           <Button icon={<PlusCircle size={18} />}>Tambah Kucing</Button>
@@ -96,7 +96,7 @@ export default function DashboardPage() {
             <div className="spotlight-info">
               <h3>{randomAnimal.name}</h3>
               <span className="animal-badge">
-                {randomAnimal.animal_types?.icon} {randomAnimal.animal_types?.name}
+                {randomAnimal.animal_types?.name}
               </span>
               {randomAnimal.location_name && (
                 <p className="spotlight-location">
@@ -145,7 +145,7 @@ export default function DashboardPage() {
               <option value="">Semua Jenis</option>
               {types.map((t) => (
                 <option key={t.id} value={t.id}>
-                  {t.icon} {t.name}
+                  {t.name}
                 </option>
               ))}
             </select>
@@ -172,9 +172,11 @@ export default function DashboardPage() {
         <LoadingSpinner />
       ) : animals.length === 0 ? (
         <div className="empty-state">
-          <span className="empty-icon">🐱</span>
+          <div className="empty-icon">
+            <Cat size={44} strokeWidth={1.5} color="var(--accent)" />
+          </div>
           <h3>Belum Ada Kucing Terdata</h3>
-          <p>Yuk mulai petualangan foto kucing liar yang kamu temui di sekitarmu!</p>
+          <p>Mulai catat kucing liar yang kamu temui di sekitarmu.</p>
           <Link to="/add">
             <Button icon={<PlusCircle size={18} />}>Foto Kucing Pertama</Button>
           </Link>
@@ -185,7 +187,7 @@ export default function DashboardPage() {
             <div key={animal.id} className="animal-card">
               <div className="card-image-wrapper">
                 <img src={animal.photo_url} alt={animal.name} className="card-image" />
-                <span className="card-badge">{animal.animal_types?.icon} {animal.animal_types?.name}</span>
+                <span className="card-badge">{animal.animal_types?.name}</span>
               </div>
               <div className="card-body">
                 <h4 className="card-name">{animal.name}</h4>
@@ -222,7 +224,7 @@ export default function DashboardPage() {
             <img src={selectedAnimal.photo_no_bg_url || selectedAnimal.photo_url} alt={selectedAnimal.name} className="detail-photo" />
             <div className="detail-info">
               <div className="detail-row">
-                <strong>Jenis:</strong> {selectedAnimal.animal_types?.icon} {selectedAnimal.animal_types?.name}
+                <strong>Jenis:</strong> {selectedAnimal.animal_types?.name}
               </div>
               <div className="detail-row">
                 <strong>Tanggal Foto:</strong>{' '}
@@ -241,8 +243,9 @@ export default function DashboardPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="map-link"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}
                   >
-                    Buka di Maps ↗
+                    Buka di Maps <ExternalLink size={12} />
                   </a>
                 </div>
               )}

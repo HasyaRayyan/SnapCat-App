@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { LayoutDashboard, Plus, User, LogOut } from 'lucide-react'
+import { LayoutDashboard, Plus, User, LogOut, Cat } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { useProfile } from '../../hooks/useProfile'
 import { useAnimals } from '../../hooks/useAnimals'
@@ -19,11 +19,11 @@ export default function AppLayout() {
       <aside className="sidebar">
         <div className="sidebar-brand">
           <div className="brand-logo-wrap">
-            <span className="brand-icon">🐱</span>
+            <Cat size={20} color="#ffffff" strokeWidth={1.75} />
           </div>
           <div className="brand-text-col">
             <span className="brand-text">StrayCat</span>
-            <span className="brand-subtext">Cat Collector 🐾</span>
+            <span className="brand-subtext">Cat Collector</span>
           </div>
         </div>
 

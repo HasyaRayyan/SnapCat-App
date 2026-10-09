@@ -43,8 +43,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
           color: 'var(--text-h)',
           fontFamily: 'var(--sans)',
         }}>
-          <span style={{ fontSize: 48, marginBottom: 16 }}>🐱</span>
-          <h2 style={{ fontSize: 22, margin: '0 0 8px' }}>Terjadi Kesalahan Tampilan</h2>
+          <h2 style={{ fontSize: 22, margin: '0 0 8px', fontWeight: 300 }}>Terjadi Kesalahan Tampilan</h2>
           <p style={{ color: 'var(--text)', maxWidth: 420, margin: '0 0 20px', fontSize: 14 }}>
             {this.state.error?.message || 'Gagal memuat komponen aplikasi.'}
           </p>
