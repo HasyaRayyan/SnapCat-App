@@ -92,11 +92,13 @@ export default function DashboardPage() {
           <LoadingSpinner size={24} />
         ) : randomAnimal ? (
           <div className="spotlight-content">
-            <img
-              src={randomAnimal.photo_no_bg_url || randomAnimal.photo_url}
-              alt={randomAnimal.name}
-              className={`spotlight-photo ${randomAnimal.photo_no_bg_url ? 'is-cutout' : ''}`}
-            />
+            <div className="spotlight-photo-frame">
+              <img
+                src={randomAnimal.photo_no_bg_url || randomAnimal.photo_url}
+                alt={randomAnimal.name}
+                className={`spotlight-photo ${randomAnimal.photo_no_bg_url ? 'is-cutout' : ''}`}
+              />
+            </div>
             <div className="spotlight-info">
               <h3>{randomAnimal.name}</h3>
               <span className="animal-badge">

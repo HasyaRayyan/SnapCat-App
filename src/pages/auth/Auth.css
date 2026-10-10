@@ -11,26 +11,28 @@
   width: 420px;
   max-width: 100%;
   background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-card, 20px);
   box-shadow: var(--shadow-lg);
   overflow: hidden;
 }
 
 .auth-header {
   text-align: center;
-  padding: 32px 28px 0;
+  padding: 36px 28px 0;
 }
 
 .auth-logo-badge {
-  width: 56px;
-  height: 56px;
-  border-radius: 14px;
+  width: 62px;
+  height: 62px;
+  border-radius: 18px;
   background: var(--accent);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+  box-shadow: 0 8px 20px rgba(46, 125, 50, 0.25);
+  color: #ffffff;
 }
 
 .auth-logo-emoji {
@@ -39,7 +41,7 @@
 
 .auth-brand-name {
   font-size: 26px;
-  font-weight: 300;
+  font-weight: 800;
   letter-spacing: -0.5px;
   margin: 0 0 6px;
   color: var(--text-h);
@@ -49,7 +51,8 @@
   color: var(--text);
   font-size: 14px;
   margin: 0;
-  line-height: 1.4;
+  line-height: 1.45;
+  opacity: 0.88;
 }
 
 .auth-form {

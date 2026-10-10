@@ -16,26 +16,31 @@
   left: 0;
   bottom: 0;
   z-index: 100;
-  box-shadow: 4px 0 24px -10px rgba(109, 40, 217, 0.05);
+  box-shadow: 2px 0 16px rgba(27, 48, 34, 0.03);
 }
 
 .sidebar-brand {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 24px 20px 22px;
+  padding: 24px 20px 20px;
   border-bottom: 1px solid var(--border);
 }
 
 .brand-logo-wrap {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
   background: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--shadow);
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.25);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.brand-logo-wrap:hover {
+  transform: rotate(-6deg) scale(1.05);
 }
 
 .brand-icon {
@@ -49,18 +54,19 @@
 
 .brand-text {
   font-size: 20px;
-  font-weight: 700;
-  letter-spacing: -0.4px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
   color: var(--text-h);
-  line-height: 1.2;
+  line-height: 1.15;
 }
 
 .brand-subtext {
   font-size: 11px;
   font-weight: 600;
-  color: var(--text);
-  letter-spacing: 0.3px;
+  color: var(--accent);
+  letter-spacing: 0.4px;
   text-transform: uppercase;
+  margin-top: 2px;
 }
 
 .sidebar-nav {
@@ -79,20 +85,20 @@
   letter-spacing: 0.8px;
   color: var(--text);
   padding: 0 12px 6px;
-  opacity: 0.7;
+  opacity: 0.65;
 }
 
 .nav-link {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 11px 14px;
-  border-radius: 12px;
+  padding: 11px 16px;
+  border-radius: 14px;
   color: var(--text);
   text-decoration: none;
-  font-size: 14.5px;
+  font-size: 14px;
   font-weight: 600;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   border: none;
   background: transparent;
   cursor: pointer;
@@ -104,6 +110,7 @@
 .nav-link:hover {
   background: var(--social-bg);
   color: var(--text-h);
+  transform: translateX(3px);
 }
 
 .nav-link:focus-visible {
@@ -114,11 +121,15 @@
 .nav-link.active {
   background: var(--accent);
   color: #ffffff;
-  box-shadow: var(--shadow);
+  box-shadow: 0 4px 14px rgba(46, 125, 50, 0.22);
+}
+
+.nav-link.active:hover {
+  transform: none;
 }
 
 .nav-link.active .nav-badge {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.22);
   color: #ffffff;
 }
 
@@ -130,23 +141,24 @@
 
 .nav-badge {
   margin-left: auto;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 700;
   padding: 2px 8px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--accent-bg);
   color: var(--accent);
 }
 
 .nav-badge-new {
   margin-left: auto;
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 700;
   padding: 2px 7px;
-  border-radius: 6px;
+  border-radius: 8px;
   background: #10b981;
   color: #ffffff;
   text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
 .nav-link.active .nav-badge-new {
@@ -168,14 +180,14 @@
   padding: 10px 12px;
   background: var(--social-bg);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 16px;
 }
 
 .user-avatar-circle {
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
-  background: var(--accent-gradient);
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  background: var(--accent);
   color: #ffffff;
   font-weight: 700;
   font-size: 16px;
@@ -183,6 +195,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(46, 125, 50, 0.2);
 }
 
 .user-text-col {
@@ -204,6 +217,7 @@
 .user-role-text {
   font-size: 11.5px;
   color: var(--text);
+  opacity: 0.8;
 }
 
 .user-logout-icon-btn {
@@ -212,7 +226,7 @@
   color: var(--text);
   width: 32px;
   height: 32px;
-  border-radius: 8px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -222,7 +236,7 @@
 }
 
 .user-logout-icon-btn:hover {
-  background: rgba(239, 68, 68, 0.15);
+  background: rgba(239, 68, 68, 0.12);
   color: #ef4444;
 }
 
@@ -240,14 +254,16 @@
   display: none;
   position: fixed;
   bottom: 16px;
-  left: 16px;
-  right: 16px;
+  left: 20px;
+  right: 20px;
+  max-width: 420px;
+  margin: 0 auto;
   background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 26px;
   z-index: 1000;
   padding: 8px 16px;
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 12px 32px -4px rgba(27, 48, 34, 0.12);
   align-items: center;
   justify-content: space-around;
 }
@@ -257,14 +273,16 @@
   flex-direction: column;
   align-items: center;
   gap: 3px;
-  padding: 6px 12px;
+  padding: 6px 14px;
   color: var(--text);
   text-decoration: none;
   font-size: 11px;
   font-weight: 600;
-  border-radius: 8px;
-  transition: color 0.15s;
+  border-radius: 12px;
+  transition: all 0.18s;
   position: relative;
+  min-height: 44px;
+  justify-content: center;
 }
 
 .mobile-nav-item:focus-visible {
@@ -277,22 +295,24 @@
 }
 
 .mobile-active-dot {
-  width: 4px;
-  height: 4px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: var(--accent);
   opacity: 0;
-  transition: opacity 0.15s;
+  transition: opacity 0.18s, transform 0.18s;
+  transform: scale(0.6);
 }
 
 .mobile-nav-item.active .mobile-active-dot {
   opacity: 1;
+  transform: scale(1);
 }
 
 /* Elevated Floating Center Action Button */
 .mobile-fab-center {
   position: relative;
-  top: -16px;
+  top: -18px;
   text-decoration: none;
   display: flex;
   align-items: center;
@@ -306,25 +326,26 @@
 }
 
 .fab-inner-button {
-  width: 52px;
-  height: 52px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
   background: var(--accent);
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--shadow-lg);
-  border: 2px solid var(--bg-card);
-  transition: background 0.15s;
+  box-shadow: 0 8px 20px rgba(46, 125, 50, 0.35);
+  border: 3px solid var(--bg-card);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .fab-inner-button:hover {
   background: var(--accent-hover);
+  transform: scale(1.06);
 }
 
 .mobile-fab-center:active .fab-inner-button {
-  transform: scale(0.95);
+  transform: scale(0.94);
 }
 
 @media (max-width: 768px) {
