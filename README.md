@@ -1,232 +1,222 @@
-# 🐱 StrayCat - Koleksi Kucing & Anabul yang Kamu Temui
+# StrayDex
 
-<p align="center">
-  <strong>StrayCat</strong> adalah aplikasi web untuk mengoleksi dan mendokumentasikan kucing liar dan anabul yang kamu temui di berbagai tempat. Foto langsung via kamera, beri nama, dan simpan lokasi GPS setiap kucing yang kamu jumpai!
-</p>
+StrayDex adalah aplikasi web ensiklopedia dan pendokumentasian kucing liar (*stray cats*). Aplikasi ini memungkinkan pengguna memotret kucing langsung dari kamera, memisahkan latar belakang otomatis menggunakan kecerdasan buatan di sisi peramban (*client-side AI*), serta mencatat lokasi GPS dan waktu perjumpaan secara otomatis.
 
 ---
 
-## 📋 Daftar Isi
+## Daftar Isi
 
-- [Fitur](#-fitur)
-- [Tech Stack](#-tech-stack)
-- [Struktur Project](#-struktur-project)
-- [Setup & Instalasi](#-setup--instalasi)
-- [Konfigurasi Supabase](#-konfigurasi-supabase)
-- [Database Schema](#-database-schema)
-- [Fitur Detail](#-fitur-detail)
-- [Environment Variables](#-environment-variables)
-- [Development](#-development)
-- [Deployment](#-deployment)
-
----
-
-## ✨ Fitur
-
-### 🔐 Autentikasi
-- **Login** - Masuk dengan email dan password
-- **Register** - Daftar akun baru dengan username, nama lengkap, email, dan password
-- **Reset Password** - Kirim link reset password via email
-- **Update Password** - Ubah password melalui link dari email
-
-### 📊 Dashboard
-- **Random Anabul Spotlight** - Tampilkan anabul random yang pernah kamu foto
-- **Lokasi Anabul** - Lihat di mana anabul tersebut difoto (dengan link ke Google Maps)
-- **Grid Koleksi** - Tampilkan semua anabul dalam grid card yang responsif
-- **Filter & Pencarian**:
-  - Cari berdasarkan nama anabul
-  - Filter berdasarkan jenis (Kucing, Anjing, dll)
-  - Urutkan berdasarkan tanggal atau nama (ascending/descending)
-- **Detail View** - Lihat detail lengkap anabul di modal
-- **Hapus Anabul** - Hapus data anabul dengan konfirmasi
-
-### 📸 Tambah Anabul
-- **Foto Anabul** - Ambil foto langsung dari kamera atau pilih dari galeri
-- **Crop Foto** - Crop foto untuk fokus ke anabul (built-in canvas crop tool)
-- **Beri Nama** - Kasih nama untuk setiap anabul
-- **Pilih Jenis** - Pilih jenis anabul (Kucing, Anjing, Kelinci, Hamster, Burung, Ikan, Kura-kura, dll)
-- **Tambah Jenis Baru** - Tambah jenis anabul custom dengan emoji icon
-- **Tanggal & Waktu** - Otomatis ambil tanggal dan jam saat ini (bisa diedit)
-- **Deskripsi** - Tambah catatan/cerita tentang anabul
-- **Lokasi Otomatis** - Ambil koordinat GPS dan nama lokasi otomatis (reverse geocoding via OpenStreetMap)
-- **Edit Data** - Edit semua data anabul yang sudah disimpan
-
-### 👤 Profil
-- **Data Diri** - Lihat dan edit nama, username, dan bio
-- **Statistik** - Jumlah anabul, jenis, dan lokasi yang pernah dikunjungi
-- **Ganti Password** - Ubah password langsung dari halaman profil
-- **Info Aplikasi** - Lihat versi aplikasi dan tech stack yang digunakan
-- **Logout** - Keluar dari akun
+- [Fitur Utama](#fitur-utama)
+- [Tech Stack](#tech-stack)
+- [Struktur Proyek](#struktur-proyek)
+- [Instalasi dan Menjalankan Proyek](#instalasi-dan-menjalankan-proyek)
+- [Konfigurasi Supabase](#konfigurasi-supabase)
+- [Skema Basis Data](#skema-basis-data)
+- [Variabel Lingkungan](#variabel-lingkungan)
+- [Perintah Development](#perintah-development)
+- [Catatan Arsitektur](#catatan-arsitektur)
 
 ---
 
-## 🛠 Tech Stack
+## Fitur Utama
 
-| Teknologi | Kegunaan |
-|-----------|----------|
-| **React 19** | UI Library |
-| **TypeScript** | Type Safety |
-| **Vite 8** | Build Tool & Dev Server |
-| **Supabase** | Backend-as-a-Service (Auth, Database, Storage) |
-| **React Router 7** | Client-side Routing |
-| **Lucide React** | Icon Library |
-| **date-fns** | Date Formatting |
-| **OpenStreetMap Nominatim** | Reverse Geocoding |
+### 1. Kamera Langsung
+- Tombol navigasi tambah (`+`) langsung membuka antarmuka kamera in-app secara otomatis.
+- Pengguna dapat langsung mengambil gambar tanpa harus membuka form input manual terlebih dahulu.
+- Tersedia opsi beralih kamera (depan/belakang) dan opsi fallback untuk memilih berkas dari galeri perangkat.
+
+### 2. Hapus Latar Belakang Otomatis (Client-Side AI)
+- Memisahkan tubuh kucing dari latar belakang secara otomatis tepat setelah foto diambil atau dipilih.
+- Berjalan langsung di peramban menggunakan model terkuantisasi `isnet_quint8` via ONNX Runtime Web.
+- Pre-scaling gambar otomatis ke resolusi optimal (maksimal 1200px) sebelum inferensi guna menghemat penggunaan memori RAM.
+- Menyimpan dua versi foto ke Supabase Storage: foto asli lengkap (`photo_url`) dan potongan tubuh kucing berformat PNG transparan (`photo_no_bg_url`).
+- Pratinjau interaktif: Pengguna dapat memilih tampilan kartu antara "Tubuh Kucing Saja (Bersih)" atau "Foto Asli Lengkap".
+
+### 3. Pencatatan Lokasi GPS & Waktu Otomatis
+- Koordinat lintang dan bujur serta stempel waktu diambil secara otomatis saat pengguna menekan tombol Simpan.
+- Reverse geocoding otomatis via OpenStreetMap Nominatim untuk mendeteksi alamat dan nama daerah.
+- Tautan langsung ke Google Maps berdasarkan titik koordinat yang tersimpan.
+
+### 4. Dashboard Koleksi (Dex Cards)
+- Kartu anabul bergaya ensiklopedia (*Dex Cards*) dengan efek stiker pop-out melayang untuk potongan tubuh kucing tanpa latar belakang.
+- Sorotan Anabul Hari Ini (*Spotlight*): Menampilkan satu anabul secara acak setiap sesi, dilengkapi tombol acak ulang.
+- Pencarian berdasarkan nama anabul.
+- Filter berdasarkan jenis ras/kategori dan pengurutan berdasarkan tanggal atau nama.
+- Modal detail lengkap dan konfirmasi penghapusan data.
+
+### 5. Akun & Manajemen Profil
+- Autentikasi lengkap: Masuk, pendaftaran akun baru, reset kata sandi, dan pembaruan kata sandi.
+- Halaman profil pengguna dengan ringkasan statistik total kucing terdata, variasi jenis, dan jumlah lokasi yang dikunjungi.
+- Pengaturan profil: Ubah nama lengkap, nama pengguna, dan bio.
+
+### 6. Desain Antarmuka Responsif
+- Palet warna matcha susu hangat dengan kontras tinggi (memenuhi standar WCAG AA).
+- Tipografi Montserrat proporsional dengan target sentuh tombol minimal 44px.
+- Bilah navigasi samping untuk desktop dan dock mengambang dengan tombol kamera aksi cepat untuk perangkat seluler.
+- Dukungan tema terang dan gelap.
 
 ---
 
-## 📁 Struktur Project
+## Tech Stack
+
+| Kategori | Teknologi | Deskripsi |
+| --- | --- | --- |
+| **Framework UI** | React 19 | Pustaka antarmuka komponen |
+| **Bahasa** | TypeScript | Type safety dan kejelasan kontrak data |
+| **Build Tool** | Vite 8 | Bundler berkecepatan tinggi dengan HMR |
+| **Backend & Auth** | Supabase | PostgreSQL, Auth, dan Object Storage |
+| **Routing** | React Router 7 | Navigasi halaman sisi klien |
+| **AI Inference** | @imgly/background-removal | Penghapusan latar belakang berbasis WebAssembly |
+| **AI Runtime** | onnxruntime-web 1.21.0 | Runtime eksekusi neural network di peramban |
+| **Ikon** | Lucide React | Koleksi ikon SVG modern |
+| **Format Tanggal** | date-fns | Pustaka format tanggal dengan lokalisasi Indonesia |
+| **Geocoding** | OpenStreetMap Nominatim | Layanan reverse geocoding koordinat ke teks alamat |
+
+---
+
+## Struktur Proyek
 
 ```
 StrayDex-App/
-├── public/                         # Static assets
+├── public/                         # Aset publik statis
 ├── supabase/
 │   └── migrations/
-│       └── 001_initial_schema.sql  # Database migration SQL
+│       └── 001_initial_schema.sql  # Skrip migrasi SQL Supabase
 ├── src/
+│   ├── assets/                     # Gambar dan grafik statis
 │   ├── components/
+│   │   ├── camera/
+│   │   │   ├── CameraModal.tsx     # Komponen kamera live in-app
+│   │   │   └── CameraModal.css
 │   │   ├── layout/
-│   │   │   ├── AppLayout.tsx       # Sidebar + Mobile nav layout
+│   │   │   ├── AppLayout.tsx       # Shell aplikasi (Sidebar & Mobile Dock)
 │   │   │   └── Layout.css
 │   │   └── ui/
-│   │       ├── Button.tsx          # Reusable button component
+│   │       ├── Button.tsx          # Komponen tombol reusable
 │   │       ├── Button.css
-│   │       ├── Input.tsx           # Reusable input component
+│   │       ├── Input.tsx           # Komponen input form reusable
 │   │       ├── Input.css
-│   │       ├── LoadingSpinner.tsx   # Loading indicator
-│   │       ├── Modal.tsx           # Modal dialog component
+│   │       ├── LoadingSpinner.tsx  # Indikator pemuatan
+│   │       ├── Modal.tsx           # Dialog modal reusable
 │   │       └── Modal.css
 │   ├── contexts/
-│   │   └── AuthContext.tsx         # Auth context & provider
+│   │   └── AuthContext.tsx         # State manajemen autentikasi Supabase
 │   ├── hooks/
-│   │   ├── useAnimals.ts           # CRUD operations for animals
-│   │   ├── useAnimalTypes.ts       # Animal types management
-│   │   ├── useGeolocation.ts       # GPS + reverse geocoding
-│   │   └── useProfile.ts           # User profile management
+│   │   ├── useAnimals.ts           # Operasi CRUD data anabul
+│   │   ├── useAnimalTypes.ts       # Manajemen master kategori anabul
+│   │   ├── useGeolocation.ts       # Koordinat GPS & reverse geocoding
+│   │   └── useProfile.ts           # Manajemen profil pengguna
 │   ├── lib/
-│   │   ├── supabase.ts             # Supabase client initialization
-│   │   └── storage.ts              # Photo upload/delete utilities
+│   │   ├── backgroundRemoval.ts    # Helper inferensi AI hapus background
+│   │   ├── storage.ts              # Fungsi unggah dan hapus file foto
+│   │   └── supabase.ts             # Inisialisasi klien Supabase
 │   ├── pages/
+│   │   ├── add/
+│   │   │   ├── AddAnimalPage.tsx   # Formulir tambah dan edit anabul
+│   │   │   └── AddAnimal.css
 │   │   ├── auth/
+│   │   │   ├── ForgotPasswordPage.tsx
 │   │   │   ├── LoginPage.tsx
 │   │   │   ├── RegisterPage.tsx
-│   │   │   ├── ForgotPasswordPage.tsx
 │   │   │   ├── UpdatePasswordPage.tsx
 │   │   │   └── Auth.css
 │   │   ├── dashboard/
-│   │   │   ├── DashboardPage.tsx
+│   │   │   ├── DashboardPage.tsx   # Tampilan utama kartu koleksi
 │   │   │   └── Dashboard.css
-│   │   ├── add/
-│   │   │   ├── AddAnimalPage.tsx    # Tambah & Edit anabul
-│   │   │   └── AddAnimal.css
 │   │   └── profile/
-│   │       ├── ProfilePage.tsx
+│   │       ├── ProfilePage.tsx     # Tampilan statistik dan edit profil
 │   │       └── Profile.css
 │   ├── routes/
-│   │   └── index.tsx               # Route configuration
+│   │   └── index.tsx               # Konfigurasi rute dan proteksi auth
 │   ├── types/
-│   │   ├── database.ts             # Supabase Database types
-│   │   └── index.ts                # Type aliases
-│   ├── App.tsx                     # Root component
-│   ├── main.tsx                    # Entry point
-│   └── index.css                   # Global styles
-├── .env                            # Environment variables (git-ignored)
-├── .env.example                    # Environment template
-├── package.json
-├── tsconfig.json
-└── vite.config.ts
+│   │   ├── database.ts             # Definisi skema tabel Supabase
+│   │   └── index.ts                # Tipe entitas aplikasi
+│   ├── App.tsx                     # Root component aplikasi
+│   ├── index.css                   # Variabel token desain dan gaya global
+│   └── main.tsx                    # Titik masuk aplikasi
+├── .env.example                    # Template variabel lingkungan
+├── package.json                    # Konfigurasi dependensi dan skrip proyek
+├── tsconfig.json                   # Konfigurasi kompilator TypeScript
+└── vite.config.ts                  # Konfigurasi bundler Vite dan header server
 ```
 
 ---
 
-## 🚀 Setup & Instalasi
+## Instalasi dan Menjalankan Proyek
 
-### Prerequisites
-- **Node.js** >= 18
-- **npm** >= 9
-- Akun **Supabase** (gratis di [supabase.com](https://supabase.com))
+### Prasyarat
+- Node.js versi 18 ke atas
+- npm versi 9 ke atas
+- Akun Supabase aktif (dapat dibuat gratis di [supabase.com](https://supabase.com))
 
-### Langkah Instalasi
+### Langkah Pemasangan
 
-```bash
-# 1. Clone repository
-git clone https://github.com/HasyaRayyan/StrayDex-App.git
-cd StrayDex-App
+1. Clone repositori:
+   ```bash
+   git clone https://github.com/HasyaRayyan/StrayDex-App.git
+   cd StrayDex-App
+   ```
 
-# 2. Install dependencies
-npm install
+2. Pasang dependensi:
+   ```bash
+   npm install
+   ```
 
-# 3. Setup environment variables
-cp .env.example .env
-# Edit .env dan isi dengan kredensial Supabase kamu
+3. Salin file template lingkungan:
+   ```bash
+   cp .env.example .env
+   ```
+   Isi berkas `.env` dengan kredensial Supabase URL dan Anon Key proyek Anda.
 
-# 4. Jalankan development server
-npm run dev
-```
-
----
-
-## 🔧 Konfigurasi Supabase
-
-### 1. Buat Project Supabase
-
-1. Buka [supabase.com](https://supabase.com) dan buat project baru
-2. Catat **Project URL** dan **anon/public key** dari Settings > API
-
-### 2. Jalankan Migration
-
-Buka **SQL Editor** di Supabase Dashboard, lalu copy-paste isi file `supabase/migrations/001_initial_schema.sql` dan jalankan.
-
-Migration ini akan:
-- ✅ Membuat tabel `profiles`, `animal_types`, dan `animals`
-- ✅ Mengaktifkan Row Level Security (RLS) di semua tabel
-- ✅ Membuat policy agar user hanya bisa akses data miliknya
-- ✅ Membuat index untuk performa query
-- ✅ Insert data default jenis anabul (Kucing, Anjing, Kelinci, dll)
-- ✅ Membuat trigger otomatis untuk:
-  - Auto-create profile saat user baru register
-  - Auto-update `updated_at` saat data diubah
-- ✅ Membuat storage bucket `animal-photos` untuk foto anabul
-
-### 3. Konfigurasi Auth
-
-Di Supabase Dashboard > Authentication > Settings:
-- **Site URL**: `http://localhost:5173` (development) atau URL production kamu
-- **Redirect URLs**: Tambahkan `http://localhost:5173/update-password`
-
-### 4. Isi Environment Variables
-
-Edit file `.env`:
-
-```env
-VITE_SUPABASE_URL=https://xxxxx.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIs...
-```
+4. Jalankan development server:
+   ```bash
+   npm run dev
+   ```
+   Buka peramban di `http://localhost:5173/`.
 
 ---
 
-## 🗄 Database Schema
+## Konfigurasi Supabase
+
+### 1. Eksekusi Skrip Migrasi
+Buka tab **SQL Editor** pada dashboard Supabase, kemudian salin dan jalankan seluruh isi file `supabase/migrations/001_initial_schema.sql`.
+
+Skrip ini mencakup:
+- Pembuatan tabel `profiles`, `animal_types`, dan `animals`.
+- Penambahan kolom `photo_no_bg_url` pada tabel `animals`.
+- Pengaktifan Row Level Security (RLS) di seluruh tabel agar tiap pengguna hanya dapat memodifikasi datanya sendiri.
+- Pembuatan bucket penyimpanan `animal-photos` untuk penampungan foto publik.
+- Pembuatan fungsi trigger untuk sinkronisasi profil saat registrasi dan pembaruan kolom waktu `updated_at`.
+
+### 2. Pengaturan Redirect URL Auth
+Pada dashboard Supabase masuk ke menu **Authentication** > **URL Configuration**:
+- **Site URL**: Masukkan `http://localhost:5173` (lokal) atau domain deployment Anda.
+- **Redirect URLs**: Tambahkan `http://localhost:5173/update-password`.
+
+---
+
+## Skema Basis Data
 
 ```
-┌─────────────────────┐     ┌─────────────────────┐
-│      profiles       │     │    animal_types      │
-├─────────────────────┤     ├─────────────────────┤
-│ id (PK, FK users)   │     │ id (PK, uuid)       │
-│ username (unique)   │     │ name (unique)        │
-│ full_name           │     │ icon                 │
-│ avatar_url          │     │ created_at           │
-│ bio                 │     │ user_id (FK users)   │
-│ created_at          │     └──────────┬──────────┘
-│ updated_at          │                │
-└─────────────────────┘                │
-                                       │
-┌──────────────────────────────────────┘
+┌─────────────────────┐       ┌─────────────────────┐
+│      profiles       │       │    animal_types     │
+├─────────────────────┤       ├─────────────────────┤
+│ id (PK, FK auth)    │       │ id (PK, uuid)       │
+│ username (unique)   │       │ name (unique)       │
+│ full_name           │       │ icon                │
+│ avatar_url          │       │ created_at          │
+│ bio                 │       │ user_id (FK auth)   │
+│ created_at          │       └──────────┬──────────┘
+│ updated_at          │                  │
+└─────────────────────┘                  │
+                                         │
+┌────────────────────────────────────────┘
 │
 │  ┌──────────────────────────┐
 │  │        animals           │
 │  ├──────────────────────────┤
 │  │ id (PK, uuid)            │
-│  │ user_id (FK users)       │
+│  │ user_id (FK auth)        │
 │  │ name                     │
 ├──│ type_id (FK animal_types)│
    │ description              │
@@ -241,107 +231,48 @@ VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIs...
    └──────────────────────────┘
 ```
 
-### Row Level Security (RLS)
+---
 
-Semua tabel dilindungi RLS:
-- **profiles**: User hanya bisa lihat & edit profilnya sendiri
-- **animal_types**: Semua user bisa lihat, tapi hanya bisa tambah/edit/hapus milik sendiri
-- **animals**: User hanya bisa CRUD data anabul miliknya sendiri
+## Variabel Lingkungan
+
+Pastikan berkas `.env` memiliki variabel berikut:
+
+| Variabel | Deskripsi | Status |
+| --- | --- | --- |
+| `VITE_SUPABASE_URL` | URL endpoint instans proyek Supabase | Wajib |
+| `VITE_SUPABASE_ANON_KEY` | Kunci otentikasi publik anon Supabase | Wajib |
 
 ---
 
-## 📖 Fitur Detail
-
-### Autentikasi Flow
-
-```
-Register → Email Konfirmasi → Login → Dashboard
-                                ↓
-                         Lupa Password → Email Reset → Update Password
-```
-
-### Tambah Anabul Flow
-
-```
-Pilih/Foto Anabul → (Opsional) Crop Foto → Isi Nama & Jenis
-       ↓
-Auto Get Tanggal/Jam → Isi Deskripsi → Get Lokasi GPS → Simpan
-```
-
-### Fitur Lokasi
-
-- Menggunakan **Geolocation API** browser untuk mendapatkan koordinat GPS
-- **Reverse geocoding** via OpenStreetMap Nominatim API untuk mendapatkan nama lokasi dalam Bahasa Indonesia
-- Link langsung ke **Google Maps** untuk navigasi ke lokasi foto
-
-### Fitur Crop Foto
-
-- Built-in canvas-based crop tool (tanpa library eksternal)
-- Drag untuk memilih area crop
-- Preview real-time sebelum diterapkan
-
----
-
-## 🔐 Environment Variables
-
-| Variable | Deskripsi | Wajib |
-|----------|-----------|-------|
-| `VITE_SUPABASE_URL` | URL project Supabase kamu | ✅ |
-| `VITE_SUPABASE_ANON_KEY` | Anon/public key Supabase | ✅ |
-
----
-
-## 💻 Development
+## Perintah Development
 
 ```bash
-# Jalankan dev server
+# Menjalankan development server lokal
 npm run dev
 
-# Type checking
-npx tsc --noEmit
-
-# Linting
-npm run lint
-
-# Build untuk production
+# Memeriksa tipe data dengan kompilator TypeScript
 npm run build
 
-# Preview build result
+# Menjalankan linter oxlint
+npm run lint
+
+# Pratinjau hasil build produksi secara lokal
 npm run preview
 ```
 
 ---
 
-## 🌐 Deployment
+## Catatan Arsitektur
 
-### Vercel (Recommended)
+### Isolasi Lintas Asal (Cross-Origin Isolation)
+Modul WebAssembly inferensi neural network membutuhkan akses memori `SharedArrayBuffer` pada peramban berbasis Chromium. File `vite.config.ts` telah dikonfigurasi dengan header HTTP khusus pada server lokal:
+- `Cross-Origin-Opener-Policy: same-origin`
+- `Cross-Origin-Embedder-Policy: credentialless`
 
-1. Push project ke GitHub
-2. Import project di [vercel.com](https://vercel.com)
-3. Tambahkan Environment Variables di Vercel Dashboard
-4. Deploy!
-
-### Netlify
-
-1. Push project ke GitHub
-2. Connect repository di [netlify.com](https://netlify.com)
-3. Build command: `npm run build`
-4. Publish directory: `dist`
-5. Tambahkan `_redirects` file di `public/`:
-   ```
-   /*    /index.html   200
-   ```
+Header `credentialless` memastikan peramban mengaktifkan multithreading WebAssembly tanpa memblokir pemuatan gambar eksternal (seperti file CDN Supabase Storage dan peta OpenStreetMap).
 
 ---
 
-## 📝 Lisensi
+## Lisensi
 
-MIT License - Dibuat dengan ❤️ untuk para pecinta anabul
-
----
-
-## 🐾 Credits
-
-- Ikon oleh [Lucide](https://lucide.dev)
-- Backend oleh [Supabase](https://supabase.com)
-- Geocoding oleh [OpenStreetMap Nominatim](https://nominatim.openstreetmap.org)
+Didistribusikan di bawah Lisensi MIT. Bebas dimodifikasi dan dikembangkan untuk keperluan non-komersial maupun komersial.
