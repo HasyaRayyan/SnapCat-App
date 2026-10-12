@@ -1,26 +1,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* Cute Matcha & Milk Cream Palette */
-  --text: #233729;
-  --text-h: #0f2415;
-  --bg: #f7faf7;
+  /* Warm Ginger Cat (Kucing Oren) & Biscuit Cream Palette */
+  --text: #2b1f17;
+  --text-h: #180f08;
+  --bg: #fdfbf7;
   --bg-card: #ffffff;
-  --border: #e2ece3;
-  --code-bg: #edf4ee;
+  --border: #ede4d8;
+  --code-bg: #f5ede3;
 
-  --accent: #2e7d32;
-  --accent-hover: #256629;
-  --accent-active: #1e5221;
-  --accent-bg: #eaf5ec;
-  --accent-border: #bde3c3;
-  --accent-warm: #f59e0b;
+  --accent: #ea580c;
+  --accent-hover: #c2410c;
+  --accent-active: #9a3412;
+  --accent-bg: #fff7ed;
+  --accent-border: #fed7aa;
+  --accent-warm: #d97706;
   --accent-warm-bg: #fef3c7;
 
-  --social-bg: #edf4ee;
-  --shadow: 0 4px 14px rgba(25, 45, 30, 0.04), 0 1px 3px rgba(25, 45, 30, 0.03);
-  --shadow-lg: 0 12px 30px -4px rgba(25, 45, 30, 0.08), 0 4px 10px -2px rgba(25, 45, 30, 0.04);
-  --shadow-card: 0 6px 20px -4px rgba(46, 125, 50, 0.07);
+  --social-bg: #f7f1ea;
+  --shadow: 0 4px 14px rgba(43, 31, 23, 0.05), 0 1px 3px rgba(43, 31, 23, 0.03);
+  --shadow-lg: 0 12px 30px -4px rgba(43, 31, 23, 0.09), 0 4px 10px -2px rgba(43, 31, 23, 0.04);
+  --shadow-card: 0 6px 20px -4px rgba(234, 88, 12, 0.08);
 
   --radius-sm: 8px;
   --radius-md: 12px;
@@ -44,25 +44,25 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #a8bfae;
-    --text-h: #f2faf4;
-    --bg: #0d160f;
-    --bg-card: #142318;
-    --border: #1f3325;
-    --code-bg: #192a1d;
+    --text: #baa79a;
+    --text-h: #fbf6f2;
+    --bg: #120d0a;
+    --bg-card: #1c1511;
+    --border: #2e211a;
+    --code-bg: #251b14;
 
-    --accent: #4ade80;
-    --accent-hover: #22c55e;
-    --accent-active: #16a34a;
-    --accent-bg: rgba(74, 222, 128, 0.12);
-    --accent-border: rgba(74, 222, 128, 0.28);
-    --accent-warm: #fbbf24;
-    --accent-warm-bg: rgba(251, 191, 36, 0.15);
+    --accent: #fb923c;
+    --accent-hover: #f97316;
+    --accent-active: #ea580c;
+    --accent-bg: rgba(251, 146, 60, 0.12);
+    --accent-border: rgba(251, 146, 60, 0.28);
+    --accent-warm: #f59e0b;
+    --accent-warm-bg: rgba(245, 158, 11, 0.15);
 
-    --social-bg: #18281d;
-    --shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
-    --shadow-lg: 0 12px 30px -4px rgba(0, 0, 0, 0.6);
-    --shadow-card: 0 6px 20px -4px rgba(0, 0, 0, 0.5);
+    --social-bg: #231a14;
+    --shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 12px 30px -4px rgba(0, 0, 0, 0.65);
+    --shadow-card: 0 6px 20px -4px rgba(0, 0, 0, 0.55);
   }
 }
 

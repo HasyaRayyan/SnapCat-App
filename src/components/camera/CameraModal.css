@@ -134,15 +134,15 @@
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  color: #86efac;
+  color: #fed7aa;
   font-size: 14px;
 }
 
 .camera-spinner {
   width: 34px;
   height: 34px;
-  border: 3px solid rgba(34, 197, 94, 0.2);
-  border-top-color: #22c55e;
+  border: 3px solid rgba(234, 88, 12, 0.2);
+  border-top-color: #ea580c;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -200,13 +200,13 @@
 }
 
 .camera-tool-btn:hover:not(:disabled) {
-  background: rgba(34, 197, 94, 0.2);
+  background: rgba(234, 88, 12, 0.2);
   color: #ffffff;
   transform: rotate(180deg);
 }
 
 .camera-tool-btn:focus-visible {
-  outline: 2px solid #22c55e;
+  outline: 2px solid #ea580c;
   outline-offset: 2px;
 }
 
@@ -225,7 +225,7 @@
 }
 
 .camera-shutter-btn:focus-visible {
-  outline: 2px solid #22c55e;
+  outline: 2px solid #ea580c;
   outline-offset: 3px;
 }
 
@@ -237,12 +237,12 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: #16a34a;
+  background: #ea580c;
   transition: background 0.15s;
 }
 
 .camera-shutter-btn:hover:not(:disabled) .shutter-inner {
-  background: #15803d;
+  background: #c2410c;
 }
 
 .camera-preview-actions {

@@ -59,7 +59,7 @@
 
 .photo-camera-trigger:hover {
   border-color: var(--accent);
-  background: #dff2e3;
+  background: #ffedd5;
   transform: translateY(-2px);
 }
 
@@ -73,7 +73,7 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 12px;
-  box-shadow: 0 6px 16px rgba(46, 125, 50, 0.28);
+  box-shadow: 0 6px 16px rgba(234, 88, 12, 0.28);
   transition: transform 0.2s ease;
 }
 
@@ -248,19 +248,19 @@
 
 .photo-preview-element.original-fit {
   object-fit: contain;
-  background: #0f1c12;
+  background: #18120e;
 }
 
 .photo-preview-element.cutout-fit {
   object-fit: contain;
   padding: 16px;
-  filter: drop-shadow(0 10px 22px rgba(25, 45, 30, 0.22));
+  filter: drop-shadow(0 10px 22px rgba(43, 31, 23, 0.2));
 }
 
 .bg-removal-loading-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(15, 30, 20, 0.88);
+  background: rgba(26, 18, 13, 0.88);
   backdrop-filter: blur(6px);
   z-index: 10;
   display: flex;
@@ -282,7 +282,7 @@
 .bg-removal-loading-overlay .loading-percent {
   font-size: 18px;
   font-weight: 700;
-  color: #4ade80;
+  color: #fb923c;
 }
 
 .bg-error-note {
@@ -301,7 +301,7 @@
 }
 
 .direct-camera-prompt .primary-prompt:hover {
-  background: #dff2e3;
+  background: #ffedd5;
   border-color: var(--accent-hover);
 }
 
