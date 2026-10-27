@@ -1,30 +1,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* Warm Ginger Cat (Kucing Oren) & Biscuit Cream Palette */
-  --text: #2b1f17;
-  --text-h: #180f08;
-  --bg: #fdfbf7;
+  /* Clean, Bright Natural StrayDex Palette */
+  --text: #292524;
+  --text-h: #1c1917;
+  --bg: #fcfbf9;
   --bg-card: #ffffff;
-  --border: #ede4d8;
-  --code-bg: #f5ede3;
+  --border: #e7e5e4;
+  --code-bg: #f5f5f4;
 
-  --accent: #ea580c;
-  --accent-hover: #c2410c;
-  --accent-active: #9a3412;
-  --accent-bg: #fff7ed;
+  --accent: #d96528;
+  --accent-hover: #b94e18;
+  --accent-active: #9a3d10;
+  --accent-bg: #fff5ed;
   --accent-border: #fed7aa;
   --accent-warm: #d97706;
   --accent-warm-bg: #fef3c7;
 
-  --social-bg: #f7f1ea;
-  --shadow: 0 4px 14px rgba(43, 31, 23, 0.05), 0 1px 3px rgba(43, 31, 23, 0.03);
-  --shadow-lg: 0 12px 30px -4px rgba(43, 31, 23, 0.09), 0 4px 10px -2px rgba(43, 31, 23, 0.04);
-  --shadow-card: 0 6px 20px -4px rgba(234, 88, 12, 0.08);
+  --social-bg: #f7f6f3;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-lg: 0 10px 25px -4px rgba(0, 0, 0, 0.07), 0 4px 10px -2px rgba(0, 0, 0, 0.03);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.04);
 
   --radius-sm: 8px;
   --radius-md: 12px;
-  --radius-card: 18px;
+  --radius-card: 16px;
   --radius-pill: 999px;
 
   --sans: 'Montserrat', system-ui, -apple-system, sans-serif;
@@ -33,37 +33,13 @@
 
   font: 450 15px/160% var(--sans);
   letter-spacing: -0.1px;
-  color-scheme: light dark;
+  color-scheme: light;
   color: var(--text);
   background: var(--bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #baa79a;
-    --text-h: #fbf6f2;
-    --bg: #120d0a;
-    --bg-card: #1c1511;
-    --border: #2e211a;
-    --code-bg: #251b14;
-
-    --accent: #fb923c;
-    --accent-hover: #f97316;
-    --accent-active: #ea580c;
-    --accent-bg: rgba(251, 146, 60, 0.12);
-    --accent-border: rgba(251, 146, 60, 0.28);
-    --accent-warm: #f59e0b;
-    --accent-warm-bg: rgba(245, 158, 11, 0.15);
-
-    --social-bg: #231a14;
-    --shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
-    --shadow-lg: 0 12px 30px -4px rgba(0, 0, 0, 0.65);
-    --shadow-card: 0 6px 20px -4px rgba(0, 0, 0, 0.55);
-  }
 }
 
 * {
