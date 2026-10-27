@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { MapPin, Calendar, RefreshCw, PlusCircle, Search, Filter, ChevronDown, Pencil, Trash2, Eye, Cat, ExternalLink } from 'lucide-react'
+import { MapPin, Calendar, Search, Filter, ChevronDown, ChevronLeft, ChevronRight, Pencil, Trash2, Eye, Cat, ExternalLink, Sparkles } from 'lucide-react'
 import { format } from 'date-fns'
 import { id } from 'date-fns/locale/id'
 import { useAnimals } from '../../hooks/useAnimals'
@@ -21,7 +21,7 @@ export default function DashboardPage() {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
   const [showFilters, setShowFilters] = useState(false)
 
-  const { animals, loading, getRandomAnimal, deleteAnimal } = useAnimals({
+  const { animals, loading, deleteAnimal } = useAnimals({
     searchQuery,
     typeId: selectedTypeId || undefined,
     sortField,
@@ -29,9 +29,34 @@ export default function DashboardPage() {
   })
   const { types } = useAnimalTypes()
 
-  // Random animal spotlight
-  const [randomAnimal, setRandomAnimal] = useState<AnimalWithType | null>(null)
-  const [loadingRandom, setLoadingRandom] = useState(true)
+  // Spotlight carousel state
+  const [spotlightIndex, setSpotlightIndex] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
+
+  // Auto-cycle spotlight image every 4.5 seconds
+  useEffect(() => {
+    if (animals.length <= 1 || isPaused) return
+
+    const timer = setInterval(() => {
+      setSpotlightIndex((prev) => (prev + 1) % animals.length)
+    }, 4500)
+
+    return () => clearInterval(timer)
+  }, [animals.length, isPaused])
+
+  const activeSpotlight = animals.length > 0 ? animals[spotlightIndex % animals.length] : null
+
+  const handleNextSpotlight = () => {
+    if (animals.length > 1) {
+      setSpotlightIndex((prev) => (prev + 1) % animals.length)
+    }
+  }
+
+  const handlePrevSpotlight = () => {
+    if (animals.length > 1) {
+      setSpotlightIndex((prev) => (prev - 1 + animals.length) % animals.length)
+    }
+  }
 
   // Detail modal
   const [selectedAnimal, setSelectedAnimal] = useState<AnimalWithType | null>(null)
@@ -40,24 +65,9 @@ export default function DashboardPage() {
   // Delete confirmation
   const [deletingId, setDeletingId] = useState<string | null>(null)
 
-  const refreshRandom = async () => {
-    setLoadingRandom(true)
-    const animal = await getRandomAnimal()
-    setRandomAnimal(animal)
-    setLoadingRandom(false)
-  }
-
-  useEffect(() => {
-    refreshRandom()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   const handleDelete = async (animalId: string) => {
     await deleteAnimal(animalId)
     setDeletingId(null)
-    if (randomAnimal?.id === animalId) {
-      refreshRandom()
-    }
   }
 
   const greeting = () => {
@@ -71,54 +81,120 @@ export default function DashboardPage() {
   return (
     <div className="dashboard">
       <div className="dashboard-header">
-        <div>
+        <div className="dashboard-title-wrap">
           <h1>{greeting()}, {profile?.full_name ?? 'Teman'}</h1>
-          <p className="subtitle">Tercatat <strong>{animals.length}</strong> kucing di StrayCat</p>
+          <p className="subtitle">
+            Koleksi satwa terlacak • <strong>{animals.length}</strong> anabul terdata di StrayDex
+          </p>
         </div>
-        <Link to="/add">
-          <Button icon={<PlusCircle size={18} />}>Tambah Kucing</Button>
-        </Link>
       </div>
 
-      {/* Random Animal Spotlight */}
-      <div className="spotlight-card">
+      {/* Rotating Animal Spotlight */}
+      <div
+        className="spotlight-card"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+      >
         <div className="spotlight-header">
-          <h2>Sorotan Anabul Hari Ini</h2>
-          <Button variant="ghost" size="sm" onClick={refreshRandom} icon={<RefreshCw size={16} />}>
-            Acak Lagi
-          </Button>
+          <div className="spotlight-title-group">
+            <span className="spotlight-pill">
+              <Sparkles size={13} /> Sorotan Anabul
+            </span>
+            {animals.length > 1 && (
+              <span className="spotlight-counter">
+                {(spotlightIndex % animals.length) + 1} / {animals.length}
+              </span>
+            )}
+          </div>
+          {animals.length > 1 && (
+            <div className="spotlight-nav-btns">
+              <button
+                type="button"
+                className="spotlight-nav-btn"
+                onClick={handlePrevSpotlight}
+                title="Sebelumnya"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <button
+                type="button"
+                className="spotlight-nav-btn"
+                onClick={handleNextSpotlight}
+                title="Berikutnya"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          )}
         </div>
-        {loadingRandom ? (
-          <LoadingSpinner size={24} />
-        ) : randomAnimal ? (
-          <div className="spotlight-content">
-            <div className="spotlight-photo-frame">
+
+        {loading ? (
+          <div className="spotlight-loading">
+            <LoadingSpinner size={24} />
+          </div>
+        ) : activeSpotlight ? (
+          <div className="spotlight-content" key={activeSpotlight.id}>
+            <div
+              className="spotlight-photo-frame"
+              onClick={() => { setSelectedAnimal(activeSpotlight); setShowDetail(true) }}
+              title="Klik untuk melihat detail"
+            >
               <img
-                src={randomAnimal.photo_no_bg_url || randomAnimal.photo_url}
-                alt={randomAnimal.name}
-                className={`spotlight-photo ${randomAnimal.photo_no_bg_url ? 'is-cutout' : ''}`}
+                src={activeSpotlight.photo_no_bg_url || activeSpotlight.photo_url}
+                alt={activeSpotlight.name}
+                className={`spotlight-photo ${activeSpotlight.photo_no_bg_url ? 'is-cutout' : ''}`}
               />
+              <span className="spotlight-zoom-hint">Lihat Detail</span>
             </div>
             <div className="spotlight-info">
-              <h3>{randomAnimal.name}</h3>
-              <span className="animal-badge">
-                {randomAnimal.animal_types?.name}
-              </span>
-              {randomAnimal.location_name && (
+              <div className="spotlight-meta-top">
+                <span className="animal-badge">
+                  {activeSpotlight.animal_types?.name || 'Anabul'}
+                </span>
+                {animals.length > 1 && (
+                  <span className="spotlight-autotimer-hint">
+                    {isPaused ? 'Dijeda' : 'Berganti tiap 4.5 detik'}
+                  </span>
+                )}
+              </div>
+              <h3
+                className="spotlight-name"
+                onClick={() => { setSelectedAnimal(activeSpotlight); setShowDetail(true) }}
+              >
+                {activeSpotlight.name}
+              </h3>
+              {activeSpotlight.location_name && (
                 <p className="spotlight-location">
-                  <MapPin size={14} /> {randomAnimal.location_name}
+                  <MapPin size={14} /> {activeSpotlight.location_name}
                 </p>
               )}
               <p className="spotlight-date">
                 <Calendar size={14} />{' '}
-                {format(new Date(randomAnimal.captured_at), 'EEEE, dd MMMM yyyy • HH:mm', { locale: id })}
+                {format(new Date(activeSpotlight.captured_at), 'EEEE, dd MMMM yyyy • HH:mm', { locale: id })}
               </p>
-              {randomAnimal.description && <p className="spotlight-desc">{randomAnimal.description}</p>}
+              {activeSpotlight.description && (
+                <p className="spotlight-desc">{activeSpotlight.description}</p>
+              )}
             </div>
           </div>
         ) : (
           <div className="spotlight-empty">
-            <p>Belum ada anabul yang dikoleksi. <Link to="/add">Tambah sekarang!</Link></p>
+            <Cat size={38} color="var(--accent)" strokeWidth={1.5} />
+            <p>Belum ada anabul yang dikoleksi. Buka menu Tambah untuk mulai mendata!</p>
+          </div>
+        )}
+
+        {animals.length > 1 && (
+          <div className="spotlight-dots">
+            {animals.slice(0, 8).map((a, idx) => (
+              <button
+                key={a.id}
+                type="button"
+                className={`spotlight-dot ${idx === (spotlightIndex % animals.length) ? 'active' : ''}`}
+                onClick={() => setSpotlightIndex(idx)}
+                title={`Lihat ${a.name}`}
+              />
+            ))}
           </div>
         )}
       </div>
@@ -181,11 +257,8 @@ export default function DashboardPage() {
           <div className="empty-icon">
             <Cat size={44} strokeWidth={1.5} color="var(--accent)" />
           </div>
-          <h3>Belum Ada Kucing Terdata</h3>
-          <p>Mulai catat kucing liar yang kamu temui di sekitarmu.</p>
-          <Link to="/add">
-            <Button icon={<PlusCircle size={18} />}>Foto Kucing Pertama</Button>
-          </Link>
+          <h3>Belum Ada Anabul Terdata</h3>
+          <p>Mulai catat anabul liar yang kamu temui melalui menu Tambah.</p>
         </div>
       ) : (
         <div className="animals-grid">
@@ -208,6 +281,84 @@ export default function DashboardPage() {
                 )}
                 <p className="card-date">
                   <Calendar size={12} />{' '}
+                  {format(new Date(animal.captured_at), 'dd MMM yyyy, HH:mm', { locale: id })}
+                </p>
+              </div>
+              <div className="card-actions">
+                <button type="button" className="card-action-btn" title="Lihat" onClick={() => { setSelectedAnimal(animal); setShowDetail(true) }}>
+                  <Eye size={16} />
+                </button>
+                <Link to={`/edit/${animal.id}`} className="card-action-btn" title="Edit">
+                  <Pencil size={16} />
+                </Link>
+                <button type="button" className="card-action-btn danger" title="Hapus" onClick={() => setDeletingId(animal.id)}>
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Detail Modal */}
+      <Modal isOpen={showDetail} onClose={() => setShowDetail(false)} title={selectedAnimal?.name ?? ''} size="lg">
+        {selectedAnimal && (
+          <div className="detail-content">
+            <img
+              src={selectedAnimal.photo_no_bg_url || selectedAnimal.photo_url}
+              alt={selectedAnimal.name}
+              className={`detail-photo ${selectedAnimal.photo_no_bg_url ? 'is-cutout' : ''}`}
+            />
+            <div className="detail-info">
+              <div className="detail-row">
+                <strong>Jenis:</strong> {selectedAnimal.animal_types?.name}
+              </div>
+              <div className="detail-row">
+                <strong>Tanggal Foto:</strong>{' '}
+                {format(new Date(selectedAnimal.captured_at), 'EEEE, dd MMMM yyyy • HH:mm', { locale: id })}
+              </div>
+              {selectedAnimal.location_name && (
+                <div className="detail-row">
+                  <strong>Lokasi:</strong> <MapPin size={14} /> {selectedAnimal.location_name}
+                </div>
+              )}
+              {selectedAnimal.latitude && selectedAnimal.longitude && (
+                <div className="detail-row">
+                  <strong>Koordinat:</strong> {selectedAnimal.latitude.toFixed(6)}, {selectedAnimal.longitude.toFixed(6)}
+                  <a
+                    href={`https://www.google.com/maps?q=${selectedAnimal.latitude},${selectedAnimal.longitude}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="map-link"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}
+                  >
+                    Buka di Maps <ExternalLink size={12} />
+                  </a>
+                </div>
+              )}
+              {selectedAnimal.description && (
+                <div className="detail-row">
+                  <strong>Deskripsi:</strong> {selectedAnimal.description}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <Modal isOpen={!!deletingId} onClose={() => setDeletingId(null)} title="Hapus Anabul?" size="sm">
+        <p style={{ marginBottom: 20, color: 'var(--text)' }}>
+          Yakin mau hapus anabul ini? Data yang sudah dihapus tidak bisa dikembalikan.
+        </p>
+        <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
+          <Button variant="ghost" onClick={() => setDeletingId(null)}>Batal</Button>
+          <Button variant="danger" onClick={() => deletingId && handleDelete(deletingId)}>Hapus</Button>
+        </div>
+      </Modal>
+    </div>
+  )
+}
                   {format(new Date(animal.captured_at), 'dd MMM yyyy, HH:mm', { locale: id })}
                 </p>
               </div>
