@@ -30,25 +30,25 @@
 
 .input-field {
   width: 100%;
-  padding: 11px 16px;
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-md, 12px);
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm, 6px);
   background: var(--bg-card);
   color: var(--text-h);
-  font-size: 14.5px;
+  font-size: 14px;
   font-family: var(--sans);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.15s ease;
   box-sizing: border-box;
 }
 
 .input-field.has-icon {
-  padding-left: 42px;
+  padding-left: 40px;
 }
 
 .input-field:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3.5px var(--accent-bg);
+  box-shadow: 0 0 0 2px #e5e5e5;
 }
 
 .input-field.has-error {

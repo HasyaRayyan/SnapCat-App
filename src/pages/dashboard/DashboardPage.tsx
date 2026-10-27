@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { MapPin, Calendar, Search, Filter, ChevronDown, ChevronLeft, ChevronRight, Pencil, Trash2, Eye, Cat, ExternalLink, Sparkles } from 'lucide-react'
+import { MapPin, Calendar, Search, Filter, ChevronDown, ChevronLeft, ChevronRight, Pencil, Trash2, Eye, Cat, ExternalLink } from 'lucide-react'
 import { format } from 'date-fns'
 import { id } from 'date-fns/locale/id'
 import { useAnimals } from '../../hooks/useAnimals'
@@ -97,9 +97,7 @@ export default function DashboardPage() {
       >
         <div className="spotlight-header">
           <div className="spotlight-title-group">
-            <span className="spotlight-pill">
-              <Sparkles size={13} /> Sorotan Anabul
-            </span>
+            <h2 className="spotlight-title">Sorotan Anabul</h2>
             {animals.length > 1 && (
               <span className="spotlight-counter">
                 {(spotlightIndex % animals.length) + 1} / {animals.length}
@@ -148,14 +146,9 @@ export default function DashboardPage() {
             </div>
             <div className="spotlight-info">
               <div className="spotlight-meta-top">
-                <span className="animal-badge">
+                <span className="animal-tag">
                   {activeSpotlight.animal_types?.name || 'Anabul'}
                 </span>
-                {animals.length > 1 && (
-                  <span className="spotlight-autotimer-hint">
-                    {isPaused ? 'Dijeda' : 'Berganti tiap 4.5 detik'}
-                  </span>
-                )}
               </div>
               <h3
                 className="spotlight-name"
@@ -270,7 +263,7 @@ export default function DashboardPage() {
                   alt={animal.name}
                   className={`card-image ${animal.photo_no_bg_url ? 'is-cutout' : ''}`}
                 />
-                <span className="card-badge">{animal.animal_types?.name}</span>
+                <span className="card-tag">{animal.animal_types?.name}</span>
               </div>
               <div className="card-body">
                 <h4 className="card-name">{animal.name}</h4>
