@@ -30,13 +30,13 @@
   font-weight: 700;
 }
 
-/* Spotlight Card (Kartu Sorotan Lucu) */
+/* Spotlight Card */
 .spotlight-card {
   background: var(--bg-card);
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-card, 20px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card, 16px);
   padding: 24px 28px;
-  margin-bottom: 30px;
+  margin-bottom: 28px;
   box-shadow: var(--shadow-card);
   position: relative;
   overflow: hidden;
@@ -60,20 +60,78 @@
   margin-bottom: 20px;
 }
 
-.spotlight-header h2 {
-  font-size: 18px;
-  font-weight: 700;
-  margin: 0;
+.spotlight-title-group {
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: var(--text-h);
+  gap: 10px;
+}
+
+.spotlight-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent-bg);
+  color: var(--accent);
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 12.5px;
+  font-weight: 700;
+  border: 1px solid var(--accent-border);
+}
+
+.spotlight-counter {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  opacity: 0.7;
+  background: var(--social-bg);
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+.spotlight-nav-btns {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.spotlight-nav-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.spotlight-nav-btn:hover {
+  background: var(--accent-bg);
+  border-color: var(--accent-border);
+  color: var(--accent);
+}
+
+@keyframes spotlightFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .spotlight-content {
   display: flex;
   gap: 24px;
   align-items: center;
+  animation: spotlightFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .spotlight-photo-frame {
@@ -88,6 +146,7 @@
   justify-content: center;
   flex-shrink: 0;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .spotlight-photo {
@@ -107,16 +166,53 @@
   transform: scale(1.05);
 }
 
+.spotlight-zoom-hint {
+  position: absolute;
+  bottom: 8px;
+  background: rgba(28, 25, 23, 0.85);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+.spotlight-photo-frame:hover .spotlight-zoom-hint {
+  opacity: 1;
+}
+
 .spotlight-info {
   text-align: left;
   flex: 1;
 }
 
-.spotlight-info h3 {
+.spotlight-meta-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.spotlight-name {
   margin: 0 0 8px;
   font-size: 22px;
   font-weight: 800;
   color: var(--text-h);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.spotlight-name:hover {
+  color: var(--accent);
+}
+
+.spotlight-autotimer-hint {
+  font-size: 11.5px;
+  color: var(--text);
+  opacity: 0.6;
 }
 
 .animal-badge {
@@ -130,7 +226,6 @@
   font-size: 12.5px;
   font-weight: 700;
   color: var(--accent);
-  margin-bottom: 12px;
 }
 
 .spotlight-location,
@@ -154,15 +249,47 @@
   border: 1px solid var(--border);
 }
 
+.spotlight-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
 .spotlight-empty {
-  text-align: center;
-  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 32px 16px;
   color: var(--text);
 }
 
-.spotlight-empty a {
-  color: var(--accent);
-  font-weight: 600;
+.spotlight-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.spotlight-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--border);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.spotlight-dot.active {
+  width: 22px;
+  background: var(--accent);
 }
 
 /* Filter bar */
@@ -395,14 +522,14 @@
   max-height: 380px;
   object-fit: contain;
   border-radius: 16px;
-  background: radial-gradient(circle at center, var(--accent-bg) 0%, var(--social-bg) 80%);
-  border: 1.5px solid var(--border);
+  background: var(--social-bg);
+  border: 1px solid var(--border);
   margin-bottom: 20px;
   padding: 12px;
 }
 
 .detail-photo.is-cutout {
-  filter: drop-shadow(0 10px 20px rgba(43, 31, 23, 0.2));
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.08));
 }
 
 .detail-info {
